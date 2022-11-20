@@ -22,7 +22,7 @@ export default function () {
 
   return (
     <AuthWrapper>
-      <div className="card" style={{ width: "90%" }}>
+      <div className="card" style={{ width: "100%" }}>
         <h2 className="card-header">Login</h2>
         <div className="card-body">
           <div>

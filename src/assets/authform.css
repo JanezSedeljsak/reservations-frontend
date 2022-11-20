@@ -6,16 +6,20 @@
 }
 
 .banner {
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 200px;
     width: 60%;
     background-image: url(../assets/auth-background.jpg);
     background-position: right;
     background-size: cover;
     flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+
 }
 
 .form-container {
+    transform: translateX(-10%);
     width: 40%;
     min-width: 400px;
-    background-color: var(--white);
     height: 100%;
 }
