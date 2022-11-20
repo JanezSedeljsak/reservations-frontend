@@ -1,0 +1,31 @@
+:root {
+    --primary-text: #444;
+    --ligh-background: #eee;
+    --white: #fff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, #root {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--ligh-background);
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-control {
+    margin-bottom: 10px !important;
+}
+
+.nav-link:hover {
+    cursor: pointer;
+}

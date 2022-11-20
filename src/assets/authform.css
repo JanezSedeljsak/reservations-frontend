@@ -1,0 +1,21 @@
+.auth-wrapper {
+    display: flex;
+    flex: 1;
+    flex-grow: auto;
+    height: 100%;
+}
+
+.banner {
+    width: 60%;
+    background-image: url(../assets/auth-background.jpg);
+    background-position: right;
+    background-size: cover;
+    flex-direction: column;
+}
+
+.form-container {
+    width: 40%;
+    min-width: 400px;
+    background-color: var(--white);
+    height: 100%;
+}
