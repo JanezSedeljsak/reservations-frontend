@@ -11,7 +11,7 @@ import {
 const initialState = {
     accessToken: null,
     refreshToken: null,
-    isCompany: false,
+    isManagement: false,
     user: {},
     loading: false
 };
@@ -30,7 +30,7 @@ export default function (state = initialState, action) {
             const updateObj = {
                 accessToken: action.payload.accessToken, 
                 refreshToken: action.payload.refreshToken, 
-                isCompany: action.payload.isCompany ?? true // this should default to false
+                isManagement: action.payload.isManagement ?? true // this should default to false
             };
 
             return { ...state, loading: false,  ...updateObj};

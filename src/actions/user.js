@@ -18,10 +18,8 @@ export const userLogin = ({ username, password }) => {
             body: asFormData({ username, password }),
             method: 'POST'
         }).then((res) => {
-            // todo default for isCompany should be false
-            dispatch({ type: USER_LOGIN_SUCCESS, payload: { accessToken: res?.access, refreshToken: res?.refresh, isCompany: res?.isCompany } });
-        }).catch((status) => {
-            console.log(status);
+            dispatch({ type: USER_LOGIN_SUCCESS, payload: { accessToken: res?.access, refreshToken: res?.refresh, isManagement: res?.isManagement } });
+        }).catch((_) => {
             dispatch({ type: USER_LOGIN_FAIL });
         });
     }
@@ -35,10 +33,10 @@ export const userRegister = ({ username, email, password, first_name, last_name 
             body: asFormData({ username, email, password, first_name, last_name }),
             method: 'POST',
             okStatus: 201
-        }).then((res) => {
+        }).then((_) => {
             dispatch({ type: USER_REGISTER_SUCCESS });
             dispatch(userLogin({ username, password }));
-        }).catch((status) => {
+        }).catch((_) => {
             dispatch({ type: USER_REGISTER_FAIL });
         });
     }

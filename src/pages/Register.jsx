@@ -8,7 +8,7 @@ import { Input, SubmitButton } from "../components/form";
 
 export default function () {
   const isAuth = useSelector((state) => !!state.user.accessToken);
-  const loading = useSelector(state => state.user?.loading ?? false);
+  const loading = useSelector((state) => state.user?.loading ?? false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,7 +67,11 @@ export default function () {
             type={"password"}
           />
 
-          <SubmitButton onPress={handleRegister} label={"Register"} loading={loading} />
+          <SubmitButton
+            onPress={handleRegister}
+            label={"Register"}
+            loading={loading}
+          />
         </div>
 
         <div className="card-footer" style={{ marginTop: 20 }}>

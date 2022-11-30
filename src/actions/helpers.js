@@ -9,12 +9,19 @@ export function asFormData(jsonData) {
     return form_data;
 }
 
-export function apiRequest({ url, method, body, okStatus }) {
-    return new Promise(async (resolve, reject) => {
-        const response = await fetch(`${API}${url}`, {
-            method, body
-        });
+export function apiRequest({ url, method, body, okStatus, token }) {
+    let requestObject = {
+        method, body
+    };
 
+    if (token) {
+        requestObject = { ...requestObject, headers: { 
+            "Authorization": "Bearer " + token,
+        }}
+    }
+
+    return new Promise(async (resolve, reject) => {
+        const response = await fetch(`${API}${url}`, requestObject);
         if (response.status === (okStatus ?? 200)) {
             resolve(response.json());
         } else {

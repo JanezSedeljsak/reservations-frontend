@@ -8,8 +8,9 @@ import PrivateRoute from "./components/PrivateRoute";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Locations from "./pages/Locations";
 import Profile from "./pages/Profile";
+
+import Locations from "./pages/management/Locations";
 
 const Navigation = ({ isAuth }) => {
   return !isAuth ? <PublicNavbar /> : <Navbar />;
@@ -17,7 +18,7 @@ const Navigation = ({ isAuth }) => {
 
 function App() {
   const isAuth = useSelector((state) => !!state.user?.accessToken);
-  const isCompany = useSelector((state) => !!state.user?.isCompany);
+  const isManagement = useSelector((state) => !!state.user?.isManagement);
 
   return (
     <BrowserRouter>
@@ -29,7 +30,7 @@ function App() {
           path={`${BASE}home`}
           element={
             <PrivateRoute isAuth={isAuth}>
-              {isCompany ? <Locations /> : <Profile />}
+              {isManagement ? <Locations /> : <Profile />}
             </PrivateRoute>
           }
         />

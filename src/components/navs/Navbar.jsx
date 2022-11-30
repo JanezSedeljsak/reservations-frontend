@@ -6,7 +6,7 @@ import { BASE } from "../../utils";
 
 export default function () {
   const isAuth = useSelector((state) => !!state.user.accessToken);
-  const isCompany = useSelector((state) => !!state.user?.isCompany);
+  const isManagement = useSelector((state) => !!state.user?.isManagement);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ export default function () {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <a className="nav-link" onClick={() => navigate(`${BASE}home`)}>
-                {isCompany ? 'Locations' : 'Neki'}
+                {isManagement ? 'Locations' : 'Neki'}
               </a>
             </li>
           </ul>
