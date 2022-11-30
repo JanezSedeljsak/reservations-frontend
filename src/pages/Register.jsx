@@ -2,13 +2,20 @@ import React, { useRef, useEffect } from "react";
 import AuthWrapper from "../components/AuthWrapper";
 import { useNavigate } from "react-router-dom";
 import { BASE } from "../utils";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { userLogout, userRegister } from "../actions/user";
+import { Input, SubmitButton } from "../components/form";
 
 export default function () {
+  const isAuth = useSelector((state) => !!state.user.accessToken);
+  const loading = useSelector(state => state.user?.loading ?? false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const nameRef = useRef(null);
+
+  const fNameRef = useRef(null);
+  const lNameRef = useRef(null);
+  const usernameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -16,9 +23,22 @@ export default function () {
     dispatch(userLogout());
   }, []);
 
+  useEffect(() => {
+    if (isAuth) {
+      navigate(`${BASE}home`);
+    }
+  }, [isAuth]);
+
   function handleRegister() {
-    dispatch(userRegister({}));
-    navigate(`${BASE}users`);
+    const user = {
+      first_name: fNameRef.current.value,
+      last_name: lNameRef.current.value,
+      username: usernameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
+
+    dispatch(userRegister(user));
   }
 
   return (
@@ -26,47 +46,28 @@ export default function () {
       <div className="card" style={{ width: "100%" }}>
         <h2 className="card-header">Register</h2>
         <div className="card-body">
-          <div>
-            <label className="form-label" htmlFor="name">
-              Name
-            </label>
-            <input
-              ref={nameRef}
-              type="text"
-              id="name"
-              className="form-control"
-            />
-          </div>
-          <div>
-            <label className="form-label" htmlFor="email">
-              Email
-            </label>
-            <input
-              ref={emailRef}
-              type="email"
-              id="email"
-              className="form-control"
-            />
-          </div>
-          <div>
-            <label className="form-label" htmlFor="password">
-              Password
-            </label>
-            <input
-              ref={passwordRef}
-              type="password"
-              id="password"
-              className="form-control"
-            />
-          </div>
-          <button
-            style={{ marginTop: 20, minWidth: 150 }}
-            type="button"
-            className="btn btn-primary btn-rounded"
-            onClick={handleRegister}
-          >
-            Register
-          </button>
+          <Input
+            reference={fNameRef}
+            id={"first_name"}
+            type={"text"}
+            label={"First name"}
+          />
+          <Input
+            reference={lNameRef}
+            id={"last_name"}
+            type={"text"}
+            label={"Last name"}
+          />
+          <Input reference={usernameRef} id={"username"} label={"Username"} />
+          <Input reference={emailRef} id={"email"} label={"Email"} />
+          <Input
+            reference={passwordRef}
+            id={"password"}
+            label={"Password"}
+            type={"password"}
+          />
+
+          <SubmitButton onPress={handleRegister} label={"Register"} loading={loading} />
         </div>
 
         <div className="card-footer" style={{ marginTop: 20 }}>

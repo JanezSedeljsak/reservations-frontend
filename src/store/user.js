@@ -9,23 +9,31 @@ import {
 } from './types';
 
 const initialState = {
+    accessToken: null,
+    refreshToken: null,
+    isCompany: false,
     user: {},
-    jwt: null,
     loading: false
-}
+};
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case USER_REGISTER_START:
             return { ...initialState, loading: true };
         case USER_REGISTER_SUCCESS:
-            return { ...state, loading: false, jwt: action.payload.jwt, user: action.payload.user };
+            return { ...state, loading: false };
         case USER_REGISTER_FAIL:
             return {...initialState};
         case USER_LOGIN_START:
             return { ...initialState, loading: true };
         case USER_LOGIN_SUCCESS:
-            return { ...state, loading: false, jwt: action.payload.jwt, user: action.payload.user };
+            const updateObj = {
+                accessToken: action.payload.accessToken, 
+                refreshToken: action.payload.refreshToken, 
+                isCompany: action.payload.isCompany ?? true // this should default to false
+            };
+
+            return { ...state, loading: false,  ...updateObj};
         case USER_LOGIN_FAIL:
             return { ...initialState };
         case USER_LOGOUT:

@@ -1,14 +1,19 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../actions/user";
 import { useNavigate } from "react-router-dom";
 import { BASE } from "../../utils";
 
 export default function () {
+  const isAuth = useSelector((state) => !!state.user.accessToken);
+  const isCompany = useSelector((state) => !!state.user?.isCompany);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   function handleLogout() {
-    dispatch(userLogout());
+    // base route logs out user by itself
+    navigate(BASE);
   }
 
   return (
@@ -27,8 +32,8 @@ export default function () {
           </a>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" onClick={() => navigate(`${BASE}users`)}>
-                Users
+              <a className="nav-link" onClick={() => navigate(`${BASE}home`)}>
+                {isCompany ? 'Locations' : 'Neki'}
               </a>
             </li>
           </ul>

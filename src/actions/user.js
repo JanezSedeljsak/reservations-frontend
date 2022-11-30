@@ -1,21 +1,51 @@
-import { USER_LOGIN_SUCCESS, USER_LOGIN_START, USER_REGISTER_START, USER_REGISTER_SUCCESS, USER_LOGOUT } from '../store/types';
+import {
+    USER_LOGIN_SUCCESS,
+    USER_LOGIN_START,
+    USER_LOGIN_FAIL,
+    USER_REGISTER_START,
+    USER_REGISTER_FAIL,
+    USER_REGISTER_SUCCESS,
+    USER_LOGOUT
+} from '../store/types';
 
-export const userLogin = ({ }) => {
-    return (dispatch) => {
+import { asFormData, apiRequest } from './helpers';
+
+export const userLogin = ({ username, password }) => {
+    return async (dispatch) => {
         dispatch({ type: USER_LOGIN_START });
-        dispatch({ type: USER_LOGIN_SUCCESS, payload: { jwt: 'fake-jwt', user: { name: 'lorem ipsum' } } });
+        apiRequest({
+            url: '/auth/token/',
+            body: asFormData({ username, password }),
+            method: 'POST'
+        }).then((res) => {
+            // todo default for isCompany should be false
+            dispatch({ type: USER_LOGIN_SUCCESS, payload: { accessToken: res?.access, refreshToken: res?.refresh, isCompany: res?.isCompany } });
+        }).catch((status) => {
+            console.log(status);
+            dispatch({ type: USER_LOGIN_FAIL });
+        });
+    }
+}
+
+export const userRegister = ({ username, email, password, first_name, last_name }) => {
+    return (dispatch) => {
+        dispatch({ type: USER_REGISTER_START });
+        apiRequest({
+            url: '/auth/register/',
+            body: asFormData({ username, email, password, first_name, last_name }),
+            method: 'POST',
+            okStatus: 201
+        }).then((res) => {
+            dispatch({ type: USER_REGISTER_SUCCESS });
+            dispatch(userLogin({ username, password }));
+        }).catch((status) => {
+            dispatch({ type: USER_REGISTER_FAIL });
+        });
     }
 }
 
 export const userLogout = () => {
     return (dispatch) => {
         dispatch({ type: USER_LOGOUT });
-    }
-}
-
-export const userRegister = ({}) => {
-    return (dispatch) => {
-        dispatch({ type: USER_REGISTER_START });
-        dispatch({ type: USER_REGISTER_SUCCESS, payload: { jwt: 'fake-jwt', user: { name: 'lorem ipsum' } } });
     }
 }

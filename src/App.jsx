@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { BASE } from "./utils";
@@ -9,7 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Users from "./pages/Users";
+import Locations from "./pages/Locations";
 import Profile from "./pages/Profile";
 
 const Navigation = ({ isAuth }) => {
@@ -17,20 +16,20 @@ const Navigation = ({ isAuth }) => {
 };
 
 function App() {
-  const isAuth = useSelector((state) => !!state.user.jwt);
+  const isAuth = useSelector((state) => !!state.user?.accessToken);
+  const isCompany = useSelector((state) => !!state.user?.isCompany);
 
   return (
     <BrowserRouter>
       <Navigation isAuth={isAuth} />
       <Routes>
-        <Route path={BASE} element={<Navigate replace to={`${BASE}login`} />} />
         <Route path={`${BASE}login`} element={<Login />} />
         <Route path={`${BASE}register`} element={<Register />} />
         <Route
-          path={`${BASE}users`}
+          path={`${BASE}home`}
           element={
             <PrivateRoute isAuth={isAuth}>
-              <Users />
+              {isCompany ? <Locations /> : <Profile />}
             </PrivateRoute>
           }
         />
@@ -42,6 +41,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<Navigate replace to={`${BASE}login`} />} />
       </Routes>
     </BrowserRouter>
   );

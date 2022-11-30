@@ -2,22 +2,37 @@ import React, { useRef, useEffect } from "react";
 import AuthWrapper from "../components/AuthWrapper";
 import { useNavigate } from "react-router-dom";
 import { BASE } from "../utils";
-import { useDispatch } from "react-redux";
-import { userLogin, userLogout } from '../actions/user';
+import { useSelector, useDispatch } from "react-redux";
+import { userLogin, userLogout } from "../actions/user";
+import { Input, SubmitButton } from "../components/form";
 
 export default function () {
+  const isAuth = useSelector((state) => !!state.user.accessToken);
+  const loading = useSelector(state => state.user?.loading ?? false);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const emailRef = useRef(null);
+
+  const usernameRef = useRef(null);
   const passwordRef = useRef(null);
 
   useEffect(() => {
     dispatch(userLogout());
   }, []);
 
+  useEffect(() => {
+    if (isAuth) {
+      navigate(`${BASE}home`);
+    }
+  }, [isAuth]);
+
   function handleLogin() {
-    dispatch(userLogin({}));
-    navigate(`${BASE}users`);
+    const user = {
+      username: usernameRef.current.value,
+      password: passwordRef.current.value,
+    };
+
+    dispatch(userLogin(user));
   }
 
   return (
@@ -25,36 +40,14 @@ export default function () {
       <div className="card" style={{ width: "100%" }}>
         <h2 className="card-header">Login</h2>
         <div className="card-body">
-          <div>
-            <label className="form-label" htmlFor="email">
-              Email
-            </label>
-            <input
-              ref={emailRef}
-              type="email"
-              id="email"
-              className="form-control"
-            />
-          </div>
-          <div>
-            <label className="form-label" htmlFor="password">
-              Password
-            </label>
-            <input
-              ref={passwordRef}
-              type="password"
-              id="password"
-              className="form-control"
-            />
-          </div>
-          <button
-            style={{ marginTop: 20, minWidth: 150 }}
-            type="button"
-            className="btn btn-primary btn-rounded"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
+          <Input reference={usernameRef} id={"username"} label={"Username"} />
+          <Input
+            reference={passwordRef}
+            id={"password"}
+            label={"Password"}
+            type={"password"}
+          />
+          <SubmitButton onPress={handleLogin} label={'Login'} loading={loading} />
         </div>
 
         <div className="card-footer" style={{ marginTop: 20 }}>
