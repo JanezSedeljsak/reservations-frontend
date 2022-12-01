@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 
 import Locations from "./pages/management/Locations";
+import LocationEdit from "./pages/management/LocationEdit";
 
 const Navigation = ({ isAuth }) => {
   return !isAuth ? <PublicNavbar /> : <Navbar />;
@@ -29,15 +30,23 @@ function App() {
         <Route
           path={`${BASE}home`}
           element={
-            <PrivateRoute isAuth={isAuth}>
+            <PrivateRoute isAllowed={isAuth}>
               {isManagement ? <Locations /> : <Profile />}
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${BASE}location/edit/:id`}
+          element={
+            <PrivateRoute isAllowed={isAuth && isManagement}>
+              <LocationEdit />
             </PrivateRoute>
           }
         />
         <Route
           path={`${BASE}profile`}
           element={
-            <PrivateRoute isAuth={isAuth}>
+            <PrivateRoute isAllowed={isAuth}>
               <Profile />
             </PrivateRoute>
           }

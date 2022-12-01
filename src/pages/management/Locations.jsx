@@ -1,16 +1,24 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getManagementLocations } from "../../actions/management";
 import { GoLocation, GoPencil } from "react-icons/go";
+import { BASE } from "../../utils";
 
 export default function () {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const loading = useSelector((state) => state.management.loading);
   const locations = useSelector((state) => state.management?.locations ?? []);
 
   useEffect(() => {
     dispatch(getManagementLocations());
   }, []);
+
+  function openLocation(id) {
+    navigate(`${BASE}location/edit/${id}`);
+  }
 
   const renderLocation = (location, idx) => (
     <tr key={location.id}>
@@ -26,7 +34,11 @@ export default function () {
         </div>
       </td>
       <td style={{ width: 200 }}>
-        <button type="button" className="btn btn-link btn-sm btn-rounded">
+        <button
+          type="button"
+          className="btn btn-link btn-sm btn-rounded"
+          onClick={() => openLocation(location.id)}
+        >
           <GoPencil size={30} />
         </button>
       </td>
