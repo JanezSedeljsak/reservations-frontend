@@ -1,5 +1,4 @@
 export default ({ reference, id, label, type, value }) => {
-  console.log(value);
   const renderInput = (type) => {
     if (type === "textarea") {
       return (
