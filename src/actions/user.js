@@ -81,4 +81,4 @@ export const userLogout = () => {
 }
 
 export const isUserCompany = state => !!state.user?.profile?.is_company ?? false;
-export const isProfileLoaded = state => Object.keys(state.user?.profile).length > 0;
+export const isProfileLoaded = state => state?.user?.profile?.id ?? false;
