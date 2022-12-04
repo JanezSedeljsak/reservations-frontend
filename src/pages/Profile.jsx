@@ -1,77 +1,54 @@
 import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BASE } from "../utils";
+import { isUserCompany, updateProfile } from "../actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, SubmitButton } from "../components/form";
 
 export default function () {
   const loading = useSelector((state) => state.user.loading);
-
+  const profile = useSelector((state) => state.user.profile);
+  const isCompany = useSelector(isUserCompany);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
- 
-  const fNameRef = useRef(null);
-  const lNameRef = useRef(null);
-  const usernameRef = useRef(null);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
 
-  const oldUsernameRef = useRef(null);
-  const oldPasswordRef = useRef(null);
+  const phoneRef = useRef(null);
+  const bioRef = useRef(null);
+  const locationRef = useRef(null);
+  const birthDateRef = useRef(null);
 
   function handleProfileUpdate() {
-    const user = {
-      first_name: fNameRef.current.value,
-      last_name: lNameRef.current.value,
-      username: usernameRef.current.value,
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-
-      prev_username: oldUsernameRef.current.value,
-      prev_password: oldPasswordRef.current.value,
+    const data = {
+      id: profile?.id,
+      phone: phoneRef.current.value,
+      bio: bioRef.current.value,
+      location: locationRef.current.value,
+      birth_date: birthDateRef.current.value,
     };
-    
-    // dispatch update profile
+
+    dispatch(updateProfile(data));
   }
 
   return (
     <div className="center" style={{ marginTop: 20 }}>
-      <div className="card" style={{ width: "90%" }}>
-        <h2 className="card-header">Edit profile TODO!!!</h2>
+      <div className="card main-container">
+        <h2 className="card-header">Edit profile - {profile?.full_name}</h2>
         <div className="card-body">
+          <Input reference={phoneRef} id={"phone"} value={profile?.phone} />
           <Input
-            reference={fNameRef}
-            id={"first_name"}
-            type={"text"}
-            label={"First name"}
+            reference={locationRef}
+            id={"location"}
+            value={profile?.location}
           />
           <Input
-            reference={lNameRef}
-            id={"last_name"}
-            type={"text"}
-            label={"Last name"}
-          />
-          <Input reference={usernameRef} id={"username"} label={"Username"} />
-          <Input reference={emailRef} id={"email"} label={"Email"} />
-          <Input
-            reference={passwordRef}
-            id={"password"}
-            label={"Password"}
-            type={"password"}
-          />
-
-          <div style={{ height: 50 }}></div>
-
-          <Input
-            reference={oldUsernameRef}
-            id={"old_username"}
-            label={"Username"}
+            reference={birthDateRef}
+            id={"birth_date"}
+            label={isCompany ? "founded" : "birth date"}
+            value={profile?.birth_date}
           />
           <Input
-            reference={oldPasswordRef}
-            id={"old_password"}
-            label={"Password"}
-            type={"password"}
+            reference={bioRef}
+            id={"bio"}
+            type={"textarea"}
+            value={profile?.bio}
           />
 
           <SubmitButton

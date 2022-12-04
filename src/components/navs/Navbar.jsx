@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogout } from "../../actions/user";
+import { isUserCompany, userLogout } from "../../actions/user";
 import { useNavigate } from "react-router-dom";
 import { BASE } from "../../utils";
 
 export default function () {
   const isAuth = useSelector((state) => !!state.user.accessToken);
-  const isManagement = useSelector((state) => !!state.user?.isManagement);
+  const isCompany = useSelector(isUserCompany);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,14 +32,27 @@ export default function () {
           </a>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" onClick={() => navigate(`${BASE}home`)}>
-                {isManagement ? 'Locations' : 'Neki'}
+              <a
+                className="nav-link"
+                onClick={() => navigate(`${BASE}companies`)}
+              >
+                Companies
               </a>
             </li>
+            {isCompany ? (
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  onClick={() => navigate(`${BASE}locations`)}
+                >
+                  My locations
+                </a>
+              </li>
+            ) : null}
           </ul>
         </div>
 
-        <div className="d-flex" style={{ marginRight: 30 }}>
+        <div className="d-flex">
           <a
             className="nav-link"
             style={{ paddingRight: 20 }}

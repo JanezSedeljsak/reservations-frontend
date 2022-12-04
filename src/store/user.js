@@ -1,42 +1,41 @@
-import {
-    USER_REGISTER_START,
-    USER_REGISTER_SUCCESS,
-    USER_LOGIN_START,
-    USER_LOGIN_SUCCESS,
-    USER_LOGIN_FAIL,
-    USER_LOGOUT,
-    USER_REGISTER_FAIL
-} from './types';
+import * as TYPE from './types';
 
 const initialState = {
     accessToken: null,
     refreshToken: null,
-    isManagement: false,
-    user: {},
+    profile: {},
     loading: false
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case USER_REGISTER_START:
+        case TYPE.USER_REGISTER_START:
+        case TYPE.USER_LOGIN_START:
             return { ...initialState, loading: true };
-        case USER_REGISTER_SUCCESS:
+
+        case TYPE.USER_GET_START:
+        case TYPE.USER_PROFILE_UPDATE_START:
+            return {...state, loading: true };
+
+        case TYPE.USER_REGISTER_SUCCESS:
             return { ...state, loading: false };
-        case USER_REGISTER_FAIL:
-            return {...initialState};
-        case USER_LOGIN_START:
-            return { ...initialState, loading: true };
-        case USER_LOGIN_SUCCESS:
+        case TYPE.USER_LOGIN_SUCCESS:
             const updateObj = {
                 accessToken: action.payload.accessToken, 
-                refreshToken: action.payload.refreshToken, 
-                isManagement: action.payload.isManagement ?? true // this should default to false
+                refreshToken: action.payload.refreshToken,
             };
 
             return { ...state, loading: false,  ...updateObj};
-        case USER_LOGIN_FAIL:
-            return { ...initialState };
-        case USER_LOGOUT:
+        case TYPE.USER_GET_SUCCESS:
+        case TYPE.USER_PROFILE_UPDATE_SUCCESS:
+            return {...state, loading: false, profile: action.payload.profile };
+
+        // fails
+        case TYPE.USER_REGISTER_FAIL:
+        case TYPE.USER_LOGIN_FAIL:
+        case TYPE.USER_GET_FAIL:
+        case TYPE.USER_LOGOUT:
+        case TYPE.USER_PROFILE_UPDATE_FAIL:
             return { ...initialState };
         default:
             return state;

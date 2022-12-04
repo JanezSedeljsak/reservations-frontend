@@ -12,19 +12,15 @@ export default function () {
   const loading = useSelector((state) => state.management.loading);
   const locations = useSelector((state) => state.management?.locations ?? []);
 
-  useEffect(() => {
-    dispatch(getManagementLocations());
-  }, []);
-
   function openLocation(id) {
     navigate(`${BASE}location/edit/${id}`);
   }
 
-  const renderLocation = (location, idx) => (
+  const renderLocation = (location) => (
     <tr key={location.id}>
       <td>
         <div className="d-flex align-items-center">
-          <GoLocation size={30} />
+          <GoLocation size={25} />
           <div className="ms-3">
             <p className="fw-bold mb-1">{location.name}</p>
             <p className="text-muted mb-0">
@@ -39,7 +35,7 @@ export default function () {
           className="btn btn-link btn-sm btn-rounded"
           onClick={() => openLocation(location.id)}
         >
-          <GoPencil size={30} />
+          <GoPencil size={20} />
         </button>
       </td>
     </tr>
@@ -47,10 +43,7 @@ export default function () {
 
   return (
     <div className="center" style={{ marginTop: 20 }}>
-      <div
-        className="card"
-        style={{ width: "90%", height: "calc(100vh - 150px)" }}
-      >
+      <div className="card main-container card-max-height">
         <h2 className="card-header">Management locations</h2>
         <div className="card-body">
           <table className="table align-middle mb-0 bg-white">

@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { BASE } from "./utils";
+import { isUserCompany } from "./actions/user";
 
 import Navbar from "./components/navs/Navbar";
 import PublicNavbar from "./components/navs/PublicNavbar";
@@ -12,6 +13,8 @@ import Profile from "./pages/Profile";
 
 import Locations from "./pages/management/Locations";
 import LocationEdit from "./pages/management/LocationEdit";
+import CourtEdit from "./pages/management/courts/CourtEdit";
+import Companies from "./pages/Companies";
 
 const Navigation = ({ isAuth }) => {
   return !isAuth ? <PublicNavbar /> : <Navbar />;
@@ -19,7 +22,7 @@ const Navigation = ({ isAuth }) => {
 
 function App() {
   const isAuth = useSelector((state) => !!state.user?.accessToken);
-  const isManagement = useSelector((state) => !!state.user?.isManagement);
+  const isCompany = useSelector(isUserCompany);
 
   return (
     <BrowserRouter>
@@ -31,15 +34,31 @@ function App() {
           path={`${BASE}home`}
           element={
             <PrivateRoute isAllowed={isAuth}>
-              {isManagement ? <Locations /> : <Profile />}
+              {isCompany ? <Locations /> : <Profile />}
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${BASE}locations`}
+          element={
+            <PrivateRoute isAllowed={isAuth}>
+              {isCompany ? <Locations /> : <Navigate replace to={`${BASE}login`} />}
             </PrivateRoute>
           }
         />
         <Route
           path={`${BASE}location/edit/:id`}
           element={
-            <PrivateRoute isAllowed={isAuth && isManagement}>
+            <PrivateRoute isAllowed={isAuth && isCompany}>
               <LocationEdit />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${BASE}court/edit/:id`}
+          element={
+            <PrivateRoute isAllowed={isAuth && isCompany}>
+              <CourtEdit />
             </PrivateRoute>
           }
         />
@@ -48,6 +67,14 @@ function App() {
           element={
             <PrivateRoute isAllowed={isAuth}>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${BASE}companies`}
+          element={
+            <PrivateRoute isAllowed={isAuth}>
+              <Companies />
             </PrivateRoute>
           }
         />

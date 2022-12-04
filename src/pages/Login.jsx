@@ -5,9 +5,11 @@ import { BASE } from "../utils";
 import { useSelector, useDispatch } from "react-redux";
 import { userLogin, userLogout } from "../actions/user";
 import { Input, SubmitButton } from "../components/form";
+import { isProfileLoaded } from "../actions/user";
 
 export default function () {
   const isAuth = useSelector((state) => !!state.user.accessToken);
+  const isProfile = useSelector(isProfileLoaded);
   const loading = useSelector(state => state.user?.loading ?? false);
   
   const dispatch = useDispatch();
@@ -21,10 +23,10 @@ export default function () {
   }, []);
 
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth && isProfile) {
       navigate(`${BASE}home`);
     }
-  }, [isAuth]);
+  }, [isAuth, isProfile]);
 
   function handleLogin() {
     const user = {

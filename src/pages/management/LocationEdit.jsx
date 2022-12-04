@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { BASE } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, SubmitButton } from "../../components/form";
+import { useParams } from "react-router-dom";
 
 export default function () {
+  const { id } = useParams();
   const loading = useSelector((state) => state.management.loading);
 
   const dispatch = useDispatch();
@@ -19,19 +21,27 @@ export default function () {
       name: nameRef.current.value,
       email: emailRef.current.value,
       phone_number: phoneNumberRef.current.value,
-      website_url: urlRef.current.value,
+      //website_url: urlRef.current.value,
     };
 
-    // dispatch update location
+    alert("To še ne dela!");
+  }
+
+  function navigateToCourts() {
+    navigate(`${BASE}court/edit/${id}`);
   }
 
   return (
     <div className="center" style={{ marginTop: 20 }}>
       <div className="card" style={{ width: "90%" }}>
-        <h2 className="card-header">Edit location TODO!!!</h2>
+        <h2 className="card-header">Edit location</h2>
         <div className="card-body">
           <Input reference={nameRef} id={"name"} label={"Name"} />
-          <Input reference={phoneNumberRef} id={"phone_number"} label={"Name"} />
+          <Input
+            reference={phoneNumberRef}
+            id={"phone_number"}
+            label={"Name"}
+          />
           <Input
             reference={emailRef}
             id={"email"}
@@ -44,6 +54,9 @@ export default function () {
             label={"Update location"}
             loading={loading}
           />
+        </div>
+        <div className="card-footer text-muted">
+          <button className="btn btn-info btn-rounded" onClick={navigateToCourts}>View courts</button>
         </div>
       </div>
     </div>
