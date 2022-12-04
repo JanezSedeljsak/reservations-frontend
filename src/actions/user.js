@@ -14,9 +14,6 @@ export const userLogin = ({ username, password }) => {
             dispatch({ type: TYPE.USER_LOGIN_SUCCESS, payload: { accessToken: res?.access, refreshToken: res?.refresh } });
             dispatch(getCurrentUser());
             dispatch(getCompanies());
-            if (res?.is_company) {
-                dispatch(getManagementLocations());
-            }
         }).catch((_) => {
             dispatch({ type: TYPE.USER_LOGIN_FAIL });
         });
