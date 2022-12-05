@@ -2,6 +2,7 @@ import * as TYPE from '../store/types';
 import { asFormData, apiRequest } from './helpers';
 import { getManagementLocations } from './management';
 import { getCompanies } from './common';
+import * as toast from './toast';
 
 export const userLogin = ({ username, password }) => {
     return async (dispatch) => {
@@ -16,6 +17,7 @@ export const userLogin = ({ username, password }) => {
             dispatch(getCompanies());
         }).catch((_) => {
             dispatch({ type: TYPE.USER_LOGIN_FAIL });
+            toast.warning("Login failed");
         });
     }
 }
@@ -33,6 +35,7 @@ export const userRegister = ({ username, email, password, first_name, last_name 
             dispatch(userLogin({ username, password }));
         }).catch((_) => {
             dispatch({ type: TYPE.USER_REGISTER_FAIL });
+            toast.warning("Register failed");
         });
     }
 }
@@ -53,8 +56,10 @@ export const updateProfile = ({ id, phone, bio, location, birth_date }) => {
                     profile: { id, phone, bio, location, birth_date }
                 }
             });
+            toast.success("Profile update was successful");
         }).catch((_) => {
             dispatch({ type: TYPE.USER_PROFILE_UPDATE_FAIL });
+            toast.warning("Failed to update profile");
         });
     }
 }
@@ -74,6 +79,7 @@ export const getCurrentUser = () => {
             }
         }).catch((_) => {
             dispatch({ type: TYPE.USER_GET_FAIL });
+            toast.warning("Failed to get current user");
         });
     };
 }

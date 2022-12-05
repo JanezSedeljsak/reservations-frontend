@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { isUserCompany } from "./actions/user";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Navbar from "./components/navs/Navbar";
 import PublicNavbar from "./components/navs/PublicNavbar";
@@ -25,6 +27,7 @@ function App() {
 
   return (
     <HashRouter>
+      <ToastContainer autoClose={2000} />
       <Navigation isAuth={isAuth} />
       <Routes>
         <Route path={`/login`} element={<Login />} />
