@@ -30,7 +30,7 @@ export default function () {
   return (
     <div className="center" style={{ marginTop: 20 }}>
       <div className="card main-container">
-        <h2 className="card-header">Edit profile - {profile?.full_name}</h2>
+        <h4 className="card-header">Edit profile - {profile?.full_name}</h4>
         <div className="card-body">
           <Input reference={phoneRef} id={"phone"} value={profile?.phone} />
           <Input

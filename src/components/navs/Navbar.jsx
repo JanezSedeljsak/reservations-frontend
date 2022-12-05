@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { isUserCompany, userLogout } from "../../actions/user";
 import { useNavigate } from "react-router-dom";
 import { BASE } from "../../utils";
+import Logo from '../../assets/LogoHorizontal.svg';
 
 export default function () {
   const isAuth = useSelector((state) => !!state.user.accessToken);
@@ -22,10 +23,8 @@ export default function () {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <a className="navbar-brand mt-2 mt-lg-0" href="#">
             <img
-              src={
-                "https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-              }
-              height="15"
+              src={Logo}
+              height={35}
               alt="MDB Logo"
               loading="lazy"
             />

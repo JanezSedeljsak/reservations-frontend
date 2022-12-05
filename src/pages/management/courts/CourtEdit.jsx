@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BASE } from '../../../utils'
+import { BASE } from "../../../utils";
 import { useDispatch, useSelector } from "react-redux";
-import { Input, SubmitButton } from '../../../components/form';
+import { Input, SubmitButton } from "../../../components/form";
 
 export default function () {
   const loading = useSelector((state) => state.management.loading);
@@ -49,13 +49,10 @@ export default function () {
 
   return (
     <div className="center" style={{ marginTop: 20 }}>
-      <div
-        className="card main-container card-max-height"
-        style={{ padding: 10 }}
-      >
-        <h2 className="card-header">Court - {'ful kul court'}</h2>
+      <div className="card main-container card-max-height">
+        <h4 className="card-header">Court - {"ful kul court"}</h4>
         {renderTabsHeader()}
-        <div className="tab-content" id="ex-with-icons-content">
+        <div className="tab-content" id="ex-with-icons-content" style={{ padding: 10 }}>
           <div
             className="tab-pane fade show active"
             id="ex-with-icons-tabs-1"

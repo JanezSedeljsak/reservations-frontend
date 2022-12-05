@@ -1,15 +1,14 @@
 import React from "react";
 import "../assets/authform.css";
+import Logo from '../assets/LogoVertical.svg';
 
 export default function ({ children }) {
   return (
     <div className="auth-wrapper">
       <div className="center banner">
         <img
-          src={
-            "https://icon-library.com/images/reservation-icon-png/reservation-icon-png-29.jpg"
-          }
-          style={{ height: 150, width: 150 }}
+          src={Logo}
+          style={{ width: 250 }}
         />
         <figure className="text-center">
           <blockquote className="blockquote">
@@ -19,15 +18,8 @@ export default function ({ children }) {
             </p>
           </blockquote>
           <figcaption className="blockquote-footer">
-            Someone famous in <cite title="Source Title">Source Title</cite>
+            © Janez, Brina, Luka, Vid, Miha (2022)
           </figcaption>
-          <button
-            type="button"
-            className="btn btn-info btn-rounded"
-            data-mdb-ripple-color="dark"
-          >
-            Browse anonymously
-          </button>
         </figure>
       </div>
       <div className="center form-container">{children}</div>

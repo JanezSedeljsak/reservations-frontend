@@ -34,7 +34,7 @@ export default function () {
   return (
     <div className="center" style={{ marginTop: 20 }}>
       <div className="card" style={{ width: "90%" }}>
-        <h2 className="card-header">Edit location</h2>
+        <h4 className="card-header">Edit location</h4>
         <div className="card-body">
           <Input reference={nameRef} id={"name"} label={"Name"} />
           <Input

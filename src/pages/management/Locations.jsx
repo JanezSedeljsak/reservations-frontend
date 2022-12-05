@@ -44,7 +44,7 @@ export default function () {
   return (
     <div className="center" style={{ marginTop: 20 }}>
       <div className="card main-container card-max-height">
-        <h2 className="card-header">Management locations</h2>
+        <h4 className="card-header">Management locations</h4>
         <div className="card-body">
           <table className="table align-middle mb-0 bg-white">
             <thead className="bg-light">

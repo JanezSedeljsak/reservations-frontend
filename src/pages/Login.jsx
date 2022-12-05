@@ -40,7 +40,7 @@ export default function () {
   return (
     <AuthWrapper>
       <div className="card" style={{ width: "100%" }}>
-        <h2 className="card-header">Login</h2>
+        <h4 className="card-header">Login</h4>
         <div className="card-body">
           <Input reference={usernameRef} id={"username"} label={"Username"} />
           <Input

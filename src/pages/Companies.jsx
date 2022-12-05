@@ -33,7 +33,7 @@ export default function () {
   return (
     <div className="center" style={{ marginTop: 20 }}>
       <div className="main-container card-max-height">
-        <h2
+        <h4
           className="card-header"
           style={{
             display: "flex",
@@ -54,7 +54,7 @@ export default function () {
               <i className="fas fa-search"></i>
             </span>
           </div>
-        </h2>
+        </h4>
         <div className="card-body grid-3">{companies.map(renderCompany)}</div>
       </div>
     </div>

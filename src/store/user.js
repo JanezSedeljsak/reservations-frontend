@@ -28,7 +28,10 @@ export default function (state = initialState, action) {
             return { ...state, loading: false,  ...updateObj};
         case TYPE.USER_GET_SUCCESS:
         case TYPE.USER_PROFILE_UPDATE_SUCCESS:
-            return {...state, loading: false, profile: action.payload.profile };
+            return {...state, loading: false, profile: {
+                ...state.profile,
+                ...action.payload.profile 
+            }};
 
         // fails
         case TYPE.USER_REGISTER_FAIL:

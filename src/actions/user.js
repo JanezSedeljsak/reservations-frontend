@@ -9,7 +9,7 @@ export const userLogin = ({ username, password }) => {
         apiRequest({
             url: '/auth/token/',
             body: asFormData({ username, password }),
-            method: 'POST'
+            method: 'POST',
         }).then((res) => {
             dispatch({ type: TYPE.USER_LOGIN_SUCCESS, payload: { accessToken: res?.access, refreshToken: res?.refresh } });
             dispatch(getCurrentUser());
@@ -38,14 +38,21 @@ export const userRegister = ({ username, email, password, first_name, last_name 
 }
 
 export const updateProfile = ({ id, phone, bio, location, birth_date }) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const { accessToken } = getState().user;
         dispatch({ type: TYPE.USER_PROFILE_UPDATE_START });
         apiRequest({
             url: `/users/${id}/`,
             body: asFormData({ phone, bio, location, birth_date }),
             method: 'PATCH',
+            token: accessToken
         }).then((_) => {
-            dispatch({ type: TYPE.USER_PROFILE_UPDATE_SUCCESS });
+            dispatch({
+                type: TYPE.USER_PROFILE_UPDATE_SUCCESS,
+                payload: {
+                    profile: { id, phone, bio, location, birth_date }
+                }
+            });
         }).catch((_) => {
             dispatch({ type: TYPE.USER_PROFILE_UPDATE_FAIL });
         });
