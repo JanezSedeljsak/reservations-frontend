@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getManagementLocations } from "../actions/management";
 import { GoLocation, GoPencil } from "react-icons/go";
-import { BASE } from "../utils";
+
 import { Input } from "../components/form";
 
 export default function () {

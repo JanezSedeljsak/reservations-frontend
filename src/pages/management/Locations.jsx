@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getManagementLocations } from "../../actions/management";
 import { GoLocation, GoPencil } from "react-icons/go";
-import { BASE } from "../../utils";
+
 
 export default function () {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export default function () {
   const locations = useSelector((state) => state.management?.locations ?? []);
 
   function openLocation(id) {
-    navigate(`${BASE}location/edit/${id}`);
+    navigate(`/location/edit/${id}`);
   }
 
   const renderLocation = (location) => (

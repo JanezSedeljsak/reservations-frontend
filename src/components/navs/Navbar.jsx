@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isUserCompany, userLogout } from "../../actions/user";
 import { useNavigate } from "react-router-dom";
-import { BASE } from "../../utils";
+
 import Logo from '../../assets/LogoHorizontal.svg';
 
 export default function () {
@@ -13,8 +13,7 @@ export default function () {
   const dispatch = useDispatch();
 
   function handleLogout() {
-    // base route logs out user by itself
-    navigate(BASE);
+    navigate('/');
   }
 
   return (
@@ -33,7 +32,7 @@ export default function () {
             <li className="nav-item">
               <a
                 className="nav-link"
-                onClick={() => navigate(`${BASE}companies`)}
+                onClick={() => navigate(`/companies`)}
               >
                 Companies
               </a>
@@ -42,7 +41,7 @@ export default function () {
               <li className="nav-item">
                 <a
                   className="nav-link"
-                  onClick={() => navigate(`${BASE}locations`)}
+                  onClick={() => navigate(`/locations`)}
                 >
                   My locations
                 </a>
@@ -55,7 +54,7 @@ export default function () {
           <a
             className="nav-link"
             style={{ paddingRight: 20 }}
-            onClick={() => navigate(`${BASE}profile`)}
+            onClick={() => navigate(`/profile`)}
           >
             Profile
           </a>

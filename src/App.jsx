@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { BASE } from "./utils";
+
 import { isUserCompany } from "./actions/user";
+import { BASE } from "./utils";
 
 import Navbar from "./components/navs/Navbar";
 import PublicNavbar from "./components/navs/PublicNavbar";
@@ -25,13 +26,13 @@ function App() {
   const isCompany = useSelector(isUserCompany);
 
   return (
-    <BrowserRouter basename="reservations-frontend">
+    <BrowserRouter basename={BASE}>
       <Navigation isAuth={isAuth} />
       <Routes>
-        <Route path={`login`} element={<Login />} />
-        <Route path={`register`} element={<Register />} />
+        <Route path={`/login`} element={<Login />} />
+        <Route path={`/register`} element={<Register />} />
         <Route
-          path={`home`}
+          path={`/home`}
           element={
             <PrivateRoute isAllowed={isAuth}>
               {isCompany ? <Locations /> : <Profile />}
@@ -39,7 +40,7 @@ function App() {
           }
         />
         <Route
-          path={`locations`}
+          path={`/locations`}
           element={
             <PrivateRoute isAllowed={isAuth}>
               {isCompany ? <Locations /> : <Navigate replace to={`login`} />}
@@ -47,7 +48,7 @@ function App() {
           }
         />
         <Route
-          path={`location/edit/:id`}
+          path={`/location/edit/:id`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
               <LocationEdit />
@@ -55,7 +56,7 @@ function App() {
           }
         />
         <Route
-          path={`court/edit/:id`}
+          path={`/court/edit/:id`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
               <CourtEdit />
@@ -63,7 +64,7 @@ function App() {
           }
         />
         <Route
-          path={`profile`}
+          path={`/profile`}
           element={
             <PrivateRoute isAllowed={isAuth}>
               <Profile />
@@ -71,14 +72,14 @@ function App() {
           }
         />
         <Route
-          path={`companies`}
+          path={`/companies`}
           element={
             <PrivateRoute isAllowed={isAuth}>
               <Companies />
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<Navigate replace to={`login`} />} />
+        <Route path="*" element={<Navigate replace to={`/login`} />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BASE } from "../../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, SubmitButton } from "../../../components/form";
 

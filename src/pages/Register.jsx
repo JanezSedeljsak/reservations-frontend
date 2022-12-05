@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import AuthWrapper from "../components/AuthWrapper";
 import { useNavigate } from "react-router-dom";
-import { BASE } from "../utils";
+
 import { useSelector, useDispatch } from "react-redux";
 import { userLogout, userRegister } from "../actions/user";
 import { Input, SubmitButton } from "../components/form";
@@ -27,7 +27,7 @@ export default function () {
 
   useEffect(() => {
     if (isAuth && isProfile) {
-      navigate(`${BASE}home`);
+      navigate(`/home`);
     }
   }, [isAuth, isProfile]);
 
@@ -81,7 +81,7 @@ export default function () {
             type="button"
             className="btn btn-link"
             data-mdb-ripple-color="dark"
-            onClick={() => navigate(`${BASE}login`)}
+            onClick={() => navigate(`/login`)}
           >
             Already registered?
           </button>
