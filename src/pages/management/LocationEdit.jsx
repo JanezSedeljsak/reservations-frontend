@@ -56,7 +56,7 @@ export default function () {
           />
         </div>
         <div className="card-footer text-muted">
-          <button className="btn btn-info btn-rounded" onClick={navigateToCourts}>View courts</button>
+          <button className="btn btn-link btn-rounded" onClick={navigateToCourts}>View courts</button>
         </div>
       </div>
     </div>

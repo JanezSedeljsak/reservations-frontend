@@ -1,4 +1,4 @@
-export const API = "https://django-rezervacije.azurewebsites.net/api";
+export const API = "https://lp0667.pythonanywhere.com//api";
 
 export function asFormData(jsonData) {
     const form_data = new FormData();
