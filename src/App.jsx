@@ -1,8 +1,6 @@
 import { useSelector } from "react-redux";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { isUserCompany } from "./actions/user";
-import { BASE } from "./utils";
 
 import Navbar from "./components/navs/Navbar";
 import PublicNavbar from "./components/navs/PublicNavbar";
@@ -26,7 +24,7 @@ function App() {
   const isCompany = useSelector(isUserCompany);
 
   return (
-    <BrowserRouter basename={BASE}>
+    <HashRouter>
       <Navigation isAuth={isAuth} />
       <Routes>
         <Route path={`/login`} element={<Login />} />
@@ -81,7 +79,7 @@ function App() {
         />
         <Route path="*" element={<Navigate replace to={`/login`} />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
