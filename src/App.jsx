@@ -25,13 +25,13 @@ function App() {
   const isCompany = useSelector(isUserCompany);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="reservations-frontend">
       <Navigation isAuth={isAuth} />
       <Routes>
-        <Route path={`${BASE}login`} element={<Login />} />
-        <Route path={`${BASE}register`} element={<Register />} />
+        <Route path={`login`} element={<Login />} />
+        <Route path={`register`} element={<Register />} />
         <Route
-          path={`${BASE}home`}
+          path={`home`}
           element={
             <PrivateRoute isAllowed={isAuth}>
               {isCompany ? <Locations /> : <Profile />}
@@ -39,15 +39,15 @@ function App() {
           }
         />
         <Route
-          path={`${BASE}locations`}
+          path={`locations`}
           element={
             <PrivateRoute isAllowed={isAuth}>
-              {isCompany ? <Locations /> : <Navigate replace to={`${BASE}login`} />}
+              {isCompany ? <Locations /> : <Navigate replace to={`login`} />}
             </PrivateRoute>
           }
         />
         <Route
-          path={`${BASE}location/edit/:id`}
+          path={`location/edit/:id`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
               <LocationEdit />
@@ -55,7 +55,7 @@ function App() {
           }
         />
         <Route
-          path={`${BASE}court/edit/:id`}
+          path={`court/edit/:id`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
               <CourtEdit />
@@ -63,7 +63,7 @@ function App() {
           }
         />
         <Route
-          path={`${BASE}profile`}
+          path={`profile`}
           element={
             <PrivateRoute isAllowed={isAuth}>
               <Profile />
@@ -71,14 +71,14 @@ function App() {
           }
         />
         <Route
-          path={`${BASE}companies`}
+          path={`companies`}
           element={
             <PrivateRoute isAllowed={isAuth}>
               <Companies />
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<Navigate replace to={`${BASE}login`} />} />
+        <Route path="*" element={<Navigate replace to={`login`} />} />
       </Routes>
     </BrowserRouter>
   );
