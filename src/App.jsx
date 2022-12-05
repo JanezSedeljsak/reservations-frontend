@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
-import { isUserCompany } from "./actions/user";
+import { isUserCompany, isProfileLoaded } from "./actions/user";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,18 +17,19 @@ import LocationEdit from "./pages/management/LocationEdit";
 import CourtEdit from "./pages/management/courts/CourtEdit";
 import Companies from "./pages/Companies";
 
-const Navigation = ({ isAuth }) => {
-  return !isAuth ? <PublicNavbar /> : <Navbar />;
+const Navigation = ({ isAuth, isPofile }) => {
+  return !(isAuth && isPofile) ? <PublicNavbar /> : <Navbar />;
 };
 
 function App() {
-  const isAuth = useSelector((state) => !!state.user?.accessToken);
+  const isAuth = useSelector((state) => !!state.user.accessToken);
+  const isPofile = useSelector(isProfileLoaded);
   const isCompany = useSelector(isUserCompany);
 
   return (
     <HashRouter>
       <ToastContainer autoClose={2000} />
-      <Navigation isAuth={isAuth} />
+      <Navigation isAuth={isAuth} isPofile={isPofile} />
       <Routes>
         <Route path={`/login`} element={<Login />} />
         <Route path={`/register`} element={<Register />} />

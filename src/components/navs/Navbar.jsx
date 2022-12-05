@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isUserCompany, userLogout } from "../../actions/user";
+import { isUserCompany } from "../../actions/user";
 import { useNavigate } from "react-router-dom";
 
 import Logo from '../../assets/LogoHorizontal.svg';
 
 export default function () {
-  const isAuth = useSelector((state) => !!state.user.accessToken);
   const isCompany = useSelector(isUserCompany);
 
   const navigate = useNavigate();
