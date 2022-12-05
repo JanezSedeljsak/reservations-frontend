@@ -9,7 +9,7 @@ export default ({ onPress, label, loading }) => {
     >
       {loading ? (
         <div
-          class="spinner-border text-info"
+          className="spinner-border text-info"
           role="status"
           style={{ height: 20, width: 20 }}
         />

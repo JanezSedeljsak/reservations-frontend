@@ -74,6 +74,7 @@ export const getCurrentUser = () => {
             token: accessToken
         }).then((res) => {
             dispatch({ type: TYPE.USER_GET_SUCCESS, payload: { profile: res } });
+            toast.success('Login success');
             if (res?.is_company) {
                 dispatch(getManagementLocations());
             }

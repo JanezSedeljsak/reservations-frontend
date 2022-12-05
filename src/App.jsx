@@ -14,8 +14,9 @@ import Profile from "./pages/Profile";
 
 import Locations from "./pages/management/Locations";
 import LocationEdit from "./pages/management/LocationEdit";
-import CourtEdit from "./pages/management/courts/CourtEdit";
+import CourtTimeline from "./pages/management/courts/CourtTimeline";
 import Companies from "./pages/Companies";
+import LocationCourts from "./pages/management/courts/LocationCourts";
 
 const Navigation = ({ isAuth, isPofile }) => {
   return !(isAuth && isPofile) ? <PublicNavbar /> : <Navbar />;
@@ -58,10 +59,18 @@ function App() {
           }
         />
         <Route
-          path={`/court/edit/:id`}
+          path={`/location/courts/:id`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
-              <CourtEdit />
+              <LocationCourts />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/court/timeline/:id`}
+          element={
+            <PrivateRoute isAllowed={isAuth && isCompany}>
+              <CourtTimeline />
             </PrivateRoute>
           }
         />

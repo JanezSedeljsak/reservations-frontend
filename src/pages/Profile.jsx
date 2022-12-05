@@ -41,6 +41,7 @@ export default function () {
           <Input
             reference={birthDateRef}
             id={"birth_date"}
+            type={'date'}
             label={isCompany ? "founded" : "birth date"}
             value={profile?.birth_date}
           />

@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getManagementLocations } from "../actions/management";
 import { GoLocation, GoPencil } from "react-icons/go";
 import { Input } from "../components/form";
 import UserIcon from '../assets/usericon.png';

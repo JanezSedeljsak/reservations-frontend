@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getManagementLocations } from "../../actions/management";
 import { GoLocation, GoPencil } from "react-icons/go";
+import { GiTennisCourt } from "react-icons/gi";
 
 
 export default function () {
@@ -14,6 +14,10 @@ export default function () {
 
   function openLocation(id) {
     navigate(`/location/edit/${id}`);
+  }
+
+  function openCourts(id) {
+    navigate(`/location/courts/${id}`);
   }
 
   const renderLocation = (location) => (
@@ -36,6 +40,13 @@ export default function () {
           onClick={() => openLocation(location.id)}
         >
           <GoPencil size={20} />
+        </button>
+        <button
+          type="button"
+          className="btn btn-link btn-sm btn-rounded"
+          onClick={() => openCourts(location.id)}
+        >
+          <GiTennisCourt size={20} />
         </button>
       </td>
     </tr>

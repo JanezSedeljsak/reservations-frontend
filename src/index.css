@@ -46,6 +46,11 @@ body,
   grid-template-columns: repeat(3, 1fr);
 }
 
+label {
+  text-transform: capitalize;
+  margin-bottom: 0px !important;
+}
+
 @media only screen and (max-width: 600px) {
   .navbar > .container-fluid,
   .main-container {

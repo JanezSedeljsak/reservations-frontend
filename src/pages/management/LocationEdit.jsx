@@ -28,7 +28,7 @@ export default function () {
   }
 
   function navigateToCourts() {
-    navigate(`/court/edit/${id}`);
+    navigate(`/location/courts/${id}`);
   }
 
   return (
