@@ -13,7 +13,6 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 
 import Locations from "./pages/management/Locations";
-import LocationEdit from "./pages/management/LocationEdit";
 import CourtTimeline from "./pages/management/courts/CourtTimeline";
 import Companies from "./pages/Companies";
 import LocationCourts from "./pages/management/courts/LocationCourts";
@@ -47,14 +46,6 @@ function App() {
           element={
             <PrivateRoute isAllowed={isAuth}>
               {isCompany ? <Locations /> : <Navigate replace to={`login`} />}
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path={`/location/edit/:id`}
-          element={
-            <PrivateRoute isAllowed={isAuth && isCompany}>
-              <LocationEdit />
             </PrivateRoute>
           }
         />

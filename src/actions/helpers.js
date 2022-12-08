@@ -29,7 +29,7 @@ export function apiRequest({ url, method, body, okStatus, token }) {
                 reject(response.status);
             }
         } catch (err) {
-            console.log(err);
+            console.err(err);
             reject(-1);
         }
     });

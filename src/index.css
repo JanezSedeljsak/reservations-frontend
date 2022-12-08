@@ -51,9 +51,27 @@ label {
   margin-bottom: 0px !important;
 }
 
+.table-row-no-padding > td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media only screen and (max-width: 600px) {
   .navbar > .container-fluid,
   .main-container {
     width: 100% !important;
+  }
+
+  .grid-3 {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(1, 1fr);
   }
 }
