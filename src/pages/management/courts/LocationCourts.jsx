@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
-import { FaCalendar, FaBackspace, FaPlusCircle } from "react-icons/fa";
+import {
+  FaCalendar,
+  FaBackspace,
+  FaPlusCircle,
+  FaCheckSquare,
+} from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import CourtEditModal from "../../../components/modals/CourtEditModal";
 import { getCourtTypes, getLocationCourts } from "../../../actions/common";
@@ -25,7 +30,18 @@ export default function () {
   const dispatch = useDispatch();
 
   const isLoading = useSelector((state) => state.common.loading > 0);
-  const courts = useSelector((state) => state.common.locationCourts ?? []);
+  const courts = useSelector((state) =>
+    state.common.locationCourts?.length > 0
+      ? state.common.locationCourts
+      : [
+          { name: "Igrisce 1", id: 2, is_outside: true },
+          { name: "Igrisce 2", id: 1 },
+          { name: "Igrisce 3", id: 3 },
+          { name: "Igrisce 4", id: 7 },
+          { name: "Fitnes", id: 5 },
+          { name: "Znanji fitnes", id: 6, is_outside: true },
+        ]
+  );
 
   const [modalVisible, setModalVisible] = useState(false);
   const [courtId, setCourtId] = useState(null);
@@ -56,21 +72,24 @@ export default function () {
           <TableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Contact</StyledTableCell>
-              <StyledTableCell align="right">Actions</StyledTableCell>
+              <StyledTableCell sx={{ width: 100 }} align="center">
+                Is outside
+              </StyledTableCell>
+              <StyledTableCell sx={{ width: 250 }} align="right">
+                Actions
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {[
-              { name: "neki", id: 2 },
-              { name: "Igrisce", id: 1 },
-            ].map((court) => (
+            {courts.map((court) => (
               <StyledTableRow key={court.id}>
                 <StyledTableCell component="th" scope="court">
                   {court.name}
                 </StyledTableCell>
-                <StyledTableCell>{court.name}</StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell sx={{ width: 100 }} align="center">
+                  {court?.is_outside ? <FaCheckSquare size={16} /> : null}
+                </StyledTableCell>
+                <StyledTableCell sx={{ width: 250 }} align="right">
                   <IconButton
                     color="primary"
                     tooltip={"Edit court"}

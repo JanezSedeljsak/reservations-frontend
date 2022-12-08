@@ -6,7 +6,6 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, SubmitButton } from "../form";
 
-
 export default function ({ isVisible, setVisible, locationId }) {
   const loading = useSelector((state) => state.management.loading);
 
@@ -16,13 +15,14 @@ export default function ({ isVisible, setVisible, locationId }) {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneNumberRef = useRef(null);
+  const urlRef = useRef(null);
 
   function handleLocationUpdate() {
     const location = {
       name: nameRef.current.value,
       email: emailRef.current.value,
       phone_number: phoneNumberRef.current.value,
-      //website_url: urlRef.current.value,
+      website_url: urlRef.current.value,
     };
 
     alert("To še ne dela!");
@@ -40,20 +40,13 @@ export default function ({ isVisible, setVisible, locationId }) {
       onOpen={() => setVisible(true)}
       disableSwipeToOpen={true}
     >
-      <Box
-        sx={{ width: 700, m: 2 }}
-        role="presentation"
-      >
+      <Box sx={{ width: 700, m: 2 }} role="presentation">
         <h5>Location form</h5>
-        <Input reference={nameRef} id={"name"} label={"Name"} />
-        <Input reference={phoneNumberRef} id={"phone_number"} label={"Name"} />
-        <Input
-          reference={emailRef}
-          id={"email"}
-          label={"Email"}
-          type={"email"}
-        />
-        <Input reference={nameRef} id={"name"} label={"Name"} />
+        <Input reference={nameRef} id={"name"} />
+        <Input reference={emailRef} type={'email'} id={"email"} />
+        <Input reference={urlRef} id={"website_url"} label={'website url'} />
+        <Input reference={phoneNumberRef} id={"phone_number"} label={'phone number'} />
+
         <SubmitButton
           onPress={handleLocationUpdate}
           label={"Update location"}
