@@ -96,7 +96,7 @@ export default function () {
     <>
       <div className="center" style={{ marginTop: 20 }}>
         <div className="main-container card-max-height">
-          <div className="page-header">
+          <div className="page-header header-row">
             <div className="page-header">
               <IconButton
                 color="default"

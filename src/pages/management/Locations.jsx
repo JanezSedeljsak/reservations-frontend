@@ -85,7 +85,7 @@ export default function () {
       />
       <div className="center" style={{ marginTop: 20 }}>
         <div className="main-container">
-          <div className="page-header">
+          <div className="page-header header-row">
           <div className="page-header">
               <h4 style={{ marginBottom: 0 }}>My locations</h4>
               <IconButton

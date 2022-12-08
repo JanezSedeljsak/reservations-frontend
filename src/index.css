@@ -23,10 +23,6 @@ body,
   align-items: center;
 }
 
-.form-control {
-  margin-bottom: 10px !important;
-}
-
 .nav-link:hover {
   cursor: pointer;
 }
@@ -61,6 +57,10 @@ label {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.header-row {
+  margin-bottom: 10px;
 }
 
 @media only screen and (max-width: 600px) {

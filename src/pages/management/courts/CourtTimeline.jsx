@@ -20,7 +20,7 @@ export default function () {
   return (
     <div className="center" style={{ marginTop: 20 }}>
       <div className="main-container">
-        <div className="page-header">
+        <div className="page-header header-row">
           <div className="page-header">
             <IconButton
               color="default"
