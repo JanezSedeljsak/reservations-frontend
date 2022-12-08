@@ -1,20 +1,37 @@
-import React, { useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Input, SubmitButton } from "../../../components/form";
 import { Scheduler } from "@aldabil/react-scheduler";
+import IconButton from "../../../components/IconButton";
+import { FaBackspace } from "react-icons/fa";
+import { Card } from "@mui/material";
 
 export default function () {
-  const loading = useSelector((state) => state.management.loading);
-
+  const { id: courtId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const loading = useSelector((state) => state.management.loading);
+
+  function goBackToCourts() {
+    navigate(`/location/courts/${courtId}`);
+  }
+
   return (
     <div className="center" style={{ marginTop: 20 }}>
-      <div className="card main-container card-max-height">
-        <h4 className="card-header">Timeline</h4>
-        <div className="card-body">
+      <div className="main-container">
+        <div className="page-header">
+          <div className="page-header">
+            <IconButton
+              color="default"
+              tooltip={"Go back"}
+              icon={<FaBackspace />}
+              onClick={goBackToCourts}
+            />
+            <h4 style={{ marginBottom: 0 }}>Timeline</h4>
+          </div>
+        </div>
+        <Card>
           <Scheduler
             view="week"
             events={[
@@ -32,7 +49,7 @@ export default function () {
               },
             ]}
           />
-        </div>
+        </Card>
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ export const getCourtTypes = () => {
         }).then((res) => {
             dispatch({
                 type: TYPE.COMMON_GET_COURT_TYPES_SUCCESS,
-                payload: { courtTypes: res?.results ?? [] }
+                payload: { courtTypes: res ?? [] }
             });
         }).catch((_) => {
             dispatch({ type: TYPE.COMMON_GET_COURT_TYPES_FAIL });

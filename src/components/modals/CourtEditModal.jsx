@@ -1,19 +1,24 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { SubmitButton, Input } from "../form";
+import { SubmitButton, Input, Select } from "../form";
 
 export default function ({ isVisible, setVisible, courtId }) {
-  const loading = useSelector((state) => state.user.loading); // change to court loading
-  const navigate = useNavigate();
+  const loading = useSelector((state) => state.common.loading > 0);
+  const courtTypes = useSelector(state => state.common.courtTypes);
 
   const nameRef = useRef();
   const typeRef = useRef();
 
   function handleCourtSubmit() {
-    alert("court submit");
+    const courtData = {
+      name: nameRef.current.value,
+      type: typeRef.current.value
+    };
+
+    console.log(courtData);
   }
 
   if (!isVisible) {
@@ -28,13 +33,14 @@ export default function ({ isVisible, setVisible, courtId }) {
       onOpen={() => setVisible(true)}
       disableSwipeToOpen={true}
     >
-      <Box
-        sx={{ width: 700, m: 2 }}
-        role="presentation"
-      >
+      <Box sx={{ width: 700, m: 2 }} role="presentation">
         <h5>Court form</h5>
         <Input reference={nameRef} id={"name"} type={"text"} />
-        <Input reference={typeRef} id={"type"} type={"text"} />
+        <Select 
+          id={'type'}
+          reference={typeRef}
+          options={courtTypes}
+        />
         <SubmitButton
           onPress={handleCourtSubmit}
           label={"Update court"}
