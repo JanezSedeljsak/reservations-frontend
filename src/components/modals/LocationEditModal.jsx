@@ -1,7 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import LocationPicker from "react-location-picker";
+
+const defaultPosition = {
+  lat: 46.05095064016724,
+  lng: 14.468964385986327,
+};
 
 import { useDispatch, useSelector } from "react-redux";
 import { Input, SubmitButton } from "../form";
@@ -17,6 +23,12 @@ export default function ({ isVisible, setVisible, locationId }) {
   const phoneNumberRef = useRef(null);
   const urlRef = useRef(null);
 
+  const [position, setPosition] = useState(defaultPosition);
+
+  function handleChangePosition(event) {
+    setPosition(event.position);
+  }
+
   function handleLocationUpdate() {
     const location = {
       name: nameRef.current.value,
@@ -25,7 +37,7 @@ export default function ({ isVisible, setVisible, locationId }) {
       website_url: urlRef.current.value,
     };
 
-    alert("To še ne dela!");
+    console.log(location, position);
   }
 
   if (!isVisible) {
@@ -43,9 +55,19 @@ export default function ({ isVisible, setVisible, locationId }) {
       <Box sx={{ width: 700, m: 2 }} role="presentation">
         <h5>Location form</h5>
         <Input reference={nameRef} id={"name"} />
-        <Input reference={emailRef} type={'email'} id={"email"} />
-        <Input reference={urlRef} id={"website_url"} label={'website url'} />
-        <Input reference={phoneNumberRef} id={"phone_number"} label={'phone number'} />
+        <Input reference={emailRef} type={"email"} id={"email"} />
+        <Input reference={urlRef} id={"website_url"} label={"website url"} />
+        <Input
+          reference={phoneNumberRef}
+          id={"phone_number"}
+          label={"phone number"}
+        />
+        <LocationPicker
+          containerElement={<div />}
+          mapElement={<div style={{ height: 200 }} />}
+          defaultPosition={defaultPosition}
+          onChange={handleChangePosition}
+        />
 
         <SubmitButton
           onPress={handleLocationUpdate}
