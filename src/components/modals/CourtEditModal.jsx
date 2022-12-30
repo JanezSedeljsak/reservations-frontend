@@ -8,6 +8,7 @@ import { SubmitButton, Input, Select, CheckBox } from "../form";
 export default function ({ isVisible, setVisible, courtId }) {
   const loading = useSelector((state) => state.common.loading > 0);
   const courtTypes = useSelector((state) => state.common.courtTypes);
+  const isCreate = courtId === null;
 
   const nameRef = useRef();
   const typeRef = useRef();

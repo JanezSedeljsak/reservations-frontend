@@ -5,17 +5,25 @@ import { Scheduler } from "@aldabil/react-scheduler";
 import IconButton from "../../../components/IconButton";
 import { FaBackspace } from "react-icons/fa";
 import { Card } from "@mui/material";
+import { getManagementSchedule } from '../../../actions/management';
+import { id } from "date-fns/locale";
 
 export default function () {
-  const { id: courtId } = useParams();
+  const { id: courtId, locationId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const loading = useSelector((state) => state.management.loading);
+  const timeline = useSelector(state => state.management.timeline);
+  console.log(timeline);
 
   function goBackToCourts() {
     navigate(`/location/courts/${courtId}`);
   }
+
+  useEffect(() => {
+    dispatch(getManagementSchedule({ court: courtId, location: locationId }));
+  }, []);
 
   return (
     <div className="center" style={{ marginTop: 20 }}>
@@ -34,20 +42,14 @@ export default function () {
         <Card>
           <Scheduler
             view="week"
-            events={[
-              {
-                event_id: 1,
-                title: "Event 1",
-                start: new Date("2022/12/2 09:30"),
-                end: new Date("2022/12/2 15:30"),
-              },
-              {
-                event_id: 2,
-                title: "Event 2",
-                start: new Date("2022/12/4 10:00"),
-                end: new Date("2022/12/4 13:00"),
-              },
-            ]}
+            navigation={true}
+            disableGoToDay={true}
+            events={timeline.map(event => ({
+              title: event.day_formatted,
+              event_id: id,
+              start: new Date(event.start_datetime),
+              end: new Date(event.end_datetime),
+            }))}
           />
         </Card>
       </div>

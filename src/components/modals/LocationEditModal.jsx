@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
@@ -12,8 +12,9 @@ const defaultPosition = {
 import { useDispatch, useSelector } from "react-redux";
 import { Input, SubmitButton } from "../form";
 
-export default function ({ isVisible, setVisible, locationId }) {
+export default function ({ isVisible, setVisible, locationId, mode }) {
   const loading = useSelector((state) => state.management.loading);
+  const isCreate = locationId === null;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,6 +26,12 @@ export default function ({ isVisible, setVisible, locationId }) {
 
   const [position, setPosition] = useState(defaultPosition);
 
+  useEffect(() => {
+    if (!isCreate) {
+      console.log("load existing location");
+    }
+  }, [locationId]);
+
   function handleChangePosition(event) {
     setPosition(event.position);
   }
@@ -34,7 +41,7 @@ export default function ({ isVisible, setVisible, locationId }) {
       name: nameRef.current.value,
       email: emailRef.current.value,
       phone_number: phoneNumberRef.current.value,
-      website_url: urlRef.current.value,
+      website_url: urlRef.current.value
     };
 
     console.log(location, position);

@@ -32,7 +32,7 @@ export default function () {
   }
 
   function openCourts(id) {
-    navigate(`/location/courts/${id}`);
+    navigate(`/location/${id}/courts/`);
   }
 
   const RenderDataTable = () => {

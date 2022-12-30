@@ -50,7 +50,7 @@ function App() {
           }
         />
         <Route
-          path={`/location/courts/:id`}
+          path={`/location/:id/courts/`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
               <LocationCourts />
@@ -58,7 +58,7 @@ function App() {
           }
         />
         <Route
-          path={`/court/timeline/:id`}
+          path={`location/:locationId/court/timeline/:id`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
               <CourtTimeline />

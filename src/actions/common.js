@@ -38,22 +38,3 @@ export const getCourtTypes = () => {
         });
     };
 }
-
-export const getLocationCourts = (locationId) => {
-    return async (dispatch, getState) => {
-        const { accessToken } = getState().user;
-        dispatch({ type: TYPE.COMMON_GET_LOCATION_COURTS_START });
-        apiRequest({
-            url: `/management/locations/${locationId}/courts/`,
-            method: 'GET',
-            token: accessToken
-        }).then((res) => {
-            dispatch({
-                type: TYPE.COMMON_GET_LOCATION_COURTS_SUCCESS,
-                payload: { locationCourts: res?.results ?? [] }
-            });
-        }).catch((_) => {
-            dispatch({ type: TYPE.COMMON_GET_LOCATION_COURTS_FAIL });
-        });
-    }
-}

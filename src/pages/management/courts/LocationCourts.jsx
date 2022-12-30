@@ -8,7 +8,8 @@ import {
 } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import CourtEditModal from "../../../components/modals/CourtEditModal";
-import { getCourtTypes, getLocationCourts } from "../../../actions/common";
+import { getCourtTypes } from "../../../actions/common";
+import { getLocationCourts } from "../../../actions/management";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyledTableCell,
@@ -30,18 +31,7 @@ export default function () {
   const dispatch = useDispatch();
 
   const isLoading = useSelector((state) => state.common.loading > 0);
-  const courts = useSelector((state) =>
-    state.common.locationCourts?.length > 0
-      ? state.common.locationCourts
-      : [
-          { name: "Igrisce 1", id: 2, is_outside: true },
-          { name: "Igrisce 2", id: 1 },
-          { name: "Igrisce 3", id: 3 },
-          { name: "Igrisce 4", id: 7 },
-          { name: "Fitnes", id: 5 },
-          { name: "Znanji fitnes", id: 6, is_outside: true },
-        ]
-  );
+  const courts = useSelector((state) =>state?.management?.locationCourts ?? []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [courtId, setCourtId] = useState(null);
@@ -58,7 +48,7 @@ export default function () {
   }, []);
 
   function openTimeline(court_id) {
-    navigate(`/court/timeline/${court_id}`);
+    navigate(`/location/${locationId}/court/timeline/${court_id}`);
   }
 
   function goBackToLocations() {

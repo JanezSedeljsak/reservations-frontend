@@ -20,7 +20,7 @@ export const getManagementLocations = () => {
     }
 }
 
-export const createManagmentLocation = ({ name, latitude, longitude, website_url }) => {
+export const createManagementLocation = ({ name, latitude, longitude, website_url }) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_CREATE_START });
@@ -38,7 +38,7 @@ export const createManagmentLocation = ({ name, latitude, longitude, website_url
     }
 }
 
-export const updateManagmentLocation = ({ id, name, latitude, longitude, owner, website_url }) => {
+export const updateManagementLocation = ({ id, name, latitude, longitude, owner, website_url }) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_UPDATE_START });
@@ -54,3 +54,41 @@ export const updateManagmentLocation = ({ id, name, latitude, longitude, owner, 
         });
     }
 }
+
+export const getLocationCourts = (locationId) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_GET_LOCATION_COURTS_START });
+        apiRequest({
+            url: `/management/locations/${locationId}/courts/`,
+            method: 'GET',
+            token: accessToken
+        }).then((res) => {
+            dispatch({
+                type: TYPE.MANAGEMENT_GET_LOCATION_COURTS_SUCCESS,
+                payload: { locationCourts: res?.results ?? [] }
+            });
+        }).catch((_) => {
+            dispatch({ type: TYPE.MANAGEMENT_GET_LOCATION_COURTS_FAIL });
+        });
+    }
+}
+
+export const getManagementSchedule = ({ location, court }) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_GET_SCHEDULE_START });
+        apiRequest({
+            url: `/schedules/?location=${location}&court=${court}`,
+            method: 'GET',
+            token: accessToken
+        }).then((res) => {
+            dispatch({
+                type: TYPE.MANAGEMENT_GET_SCHEDULE_SUCCESS,
+                payload: { timeline: res ?? [] }
+            });
+        }).catch((_) => {
+            dispatch({ type: TYPE.MANAGEMENT_GET_SCHEDULE_FAIL });
+        });
+    }
+};
