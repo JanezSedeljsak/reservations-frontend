@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
 import {
   FaCalendar,
-  FaBackspace,
   FaPlusCircle,
   FaCheckSquare,
 } from "react-icons/fa";
+import { IoReturnUpBack } from 'react-icons/io5';
 import { useNavigate, useParams } from "react-router-dom";
 import CourtEditModal from "../../../components/modals/CourtEditModal";
 import { getCourts, getCourtTypes } from "../../../actions/common";
@@ -123,7 +123,7 @@ export default function ({ isMyCourts, companyId }) {
               <IconButton
                 color="default"
                 tooltip={"Go back"}
-                icon={<FaBackspace />}
+                icon={<IoReturnUpBack />}
                 onClick={goBackToLocations}
               />
               <h4 style={{ marginBottom: 0 }}>Courts</h4>

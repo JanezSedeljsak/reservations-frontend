@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Scheduler } from "@aldabil/react-scheduler";
 import IconButton from "../../../components/IconButton";
-import { FaBackspace } from "react-icons/fa";
+import { IoReturnUpBack } from "react-icons/io5";
 import { Card } from "@mui/material";
 import { getManagementSchedule } from '../../../actions/management';
 import { id } from "date-fns/locale";
@@ -36,7 +36,7 @@ export default function ({ isMyTimeline, companyId }) {
             <IconButton
               color="default"
               tooltip={"Go back"}
-              icon={<FaBackspace />}
+              icon={<IoReturnUpBack />}
               onClick={goBackToCourts}
             />
             <h4 style={{ marginBottom: 0 }}>Timeline</h4>
