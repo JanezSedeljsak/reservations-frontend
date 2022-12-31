@@ -38,3 +38,41 @@ export const getCourtTypes = () => {
         });
     };
 }
+
+export const getLocations = ({ companyId }) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.COMMON_GET_LOCATIONS_START });
+        apiRequest({
+            url: `/locations/?owner=${companyId}`,
+            method: 'GET',
+            token: accessToken
+        }).then((res) => {
+            dispatch({
+                type: TYPE.COMMON_GET_LOCATIONS_SUCCESS,
+                payload: { locations: res?.results ?? [] }
+            });
+        }).catch((_) => {
+            dispatch({ type: TYPE.COMMON_GET_LOCATIONS_FAIL });
+        });
+    };
+}
+
+export const getCourts = ({ location }) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.COMMON_GET_COURTS_START });
+        apiRequest({
+            url: `/courts/?location=${location}`,
+            method: 'GET',
+            token: accessToken
+        }).then((res) => {
+            dispatch({
+                type: TYPE.COMMON_GET_COURTS_SUCCESS,
+                payload: { locationCourts: res?.results ?? [] }
+            });
+        }).catch((_) => {
+            dispatch({ type: TYPE.COMMON_GET_COURTS_FAIL });
+        });
+    };
+}

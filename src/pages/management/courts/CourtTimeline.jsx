@@ -8,17 +8,20 @@ import { Card } from "@mui/material";
 import { getManagementSchedule } from '../../../actions/management';
 import { id } from "date-fns/locale";
 
-export default function () {
+export default function ({ isMyTimeline, companyId }) {
   const { id: courtId, locationId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const loading = useSelector((state) => state.management.loading);
   const timeline = useSelector(state => state.management.timeline);
-  console.log(timeline);
 
   function goBackToCourts() {
-    navigate(`/location/courts/${courtId}`);
+    if (isMyTimeline) {
+      navigate(`/location/${locationId}/courts/`);
+    } else {
+      navigate(`/company/${companyId}/location/${locationId}/courts`);
+    }
   }
 
   useEffect(() => {

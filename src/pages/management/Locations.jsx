@@ -15,13 +15,16 @@ import {
 } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../components/StyledTable";
 import IconButton from "../../components/IconButton";
+import { useEffect } from "react";
+import { getLocations } from "../../actions/common";
 
-export default function () {
+export default function ({ isMyLocations, companyId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const loading = useSelector((state) => state.management.loading);
-  const locations = useSelector((state) => state.management?.locations ?? []);
+  const storeKey = isMyLocations ? 'management' : 'common';
+  const loading = useSelector((state) => state[storeKey].loading);
+  const locations = useSelector((state) => state[storeKey]?.locations ?? []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [locationId, setLocationId] = useState(null);
@@ -31,8 +34,18 @@ export default function () {
     setModalVisible(true);
   }
 
+  useEffect(() => {
+    if (!isMyLocations) {
+      dispatch(getLocations({companyId}))
+    }
+  }, []);
+
   function openCourts(id) {
-    navigate(`/location/${id}/courts/`);
+    if (isMyLocations) {
+      navigate(`/location/${id}/courts/`);
+    } else {
+      navigate(`/company/${companyId}/location/${id}/courts`);
+    }
   }
 
   const RenderDataTable = () => {
@@ -55,12 +68,12 @@ export default function () {
                 </StyledTableCell>
                 <StyledTableCell>{location.name}</StyledTableCell>
                 <StyledTableCell align="right">
-                  <IconButton
+                  {isMyLocations && <IconButton
                     icon={<GoPencil />}
                     color="primary"
                     tooltip={"Edit location"}
                     onClick={() => openLocationEditModal(location.id)}
-                  />
+                  />}
                   <IconButton
                     color="default"
                     icon={<TbSoccerField />}
@@ -87,13 +100,13 @@ export default function () {
         <div className="main-container">
           <div className="page-header header-row">
           <div className="page-header">
-              <h4 style={{ marginBottom: 0 }}>My locations</h4>
-              <IconButton
+              <h4 style={{ marginBottom: 0 }}>{!isMyLocations ? "Company locations" : "My locations"}</h4>
+              {isMyLocations && <IconButton
                 color="primary"
                 tooltip={"Add new location"}
                 icon={<FaPlusCircle />}
                 onClick={() => openLocationEditModal(null)}
-              />
+              />}
             </div>
             <div className="input-group rounded" style={{ width: 300 }}>
               <input

@@ -16,6 +16,10 @@ export default function () {
     return company?.avatar ?? UserIcon;
   }
 
+  function openCompanyLocations(companyId) {
+    navigate(`/company/${companyId}/locations`);
+  }
+
   const renderCompany = (company) => (
     <div className="card" key={company.id}>
       <div className="card-header" style={{ alignItems: 'center'}}>
@@ -29,7 +33,7 @@ export default function () {
         </p>
       </div>
       <div className="card-footer text-muted">
-        <button className="btn btn-primary btn-rounded">
+        <button className="btn btn-primary btn-rounded" onClick={() => openCompanyLocations(company.id)}>
           Check locations
         </button>
       </div>
@@ -61,7 +65,7 @@ export default function () {
             </span>
           </div>
         </h4>
-        <div className="card-body grid-3">{companies.map(renderCompany)}</div>
+        <div style={{ marginTop: 10 }} className="card-body grid-3">{companies.map(renderCompany)}</div>
       </div>
     </div>
   );
