@@ -107,7 +107,7 @@ function App() {
           path={`/location/:id/courts/`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
-              <LocationCourts />
+              <LocationCourts isMyCourts={true} />
             </PrivateRoute>
           }
         />

@@ -48,7 +48,7 @@ export default function ({ isMyTimeline, companyId }) {
             navigation={true}
             disableGoToDay={true}
             events={timeline.map(event => ({
-              title: event.day_formatted,
+              title: event.title,
               event_id: id,
               start: new Date(event.start_datetime),
               end: new Date(event.end_datetime),
