@@ -5,7 +5,7 @@ import { Scheduler } from "@aldabil/react-scheduler";
 import IconButton from "../../../components/IconButton";
 import { IoReturnUpBack } from "react-icons/io5";
 import { Card } from "@mui/material";
-import { getManagementSchedule } from '../../../actions/management';
+import { getManagementSchedule } from "../../../actions/management";
 import { id } from "date-fns/locale";
 
 export default function ({ isMyTimeline, companyId }) {
@@ -14,7 +14,7 @@ export default function ({ isMyTimeline, companyId }) {
   const navigate = useNavigate();
 
   const loading = useSelector((state) => state.management.loading);
-  const timeline = useSelector(state => state.management.timeline);
+  const timeline = useSelector((state) => state.management.timeline);
 
   function goBackToCourts() {
     if (isMyTimeline) {
@@ -47,12 +47,16 @@ export default function ({ isMyTimeline, companyId }) {
             view="week"
             navigation={true}
             disableGoToDay={true}
-            events={timeline?.map(event => ({
-              title: event.title,
-              event_id: id,
-              start: new Date(event.start_datetime),
-              end: new Date(event.end_datetime),
-            }))}
+            events={
+              (timeline?.length ?? 0) > 0
+                ? timeline?.map((event) => ({
+                    title: event.title,
+                    event_id: id,
+                    start: new Date(event.start_datetime),
+                    end: new Date(event.end_datetime),
+                  }))
+                : []
+            }
           />
         </Card>
       </div>
