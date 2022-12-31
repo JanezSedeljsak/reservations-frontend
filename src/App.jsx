@@ -16,6 +16,12 @@ import Locations from "./pages/management/Locations";
 import CourtTimeline from "./pages/management/courts/CourtTimeline";
 import Companies from "./pages/Companies";
 import LocationCourts from "./pages/management/courts/LocationCourts";
+import Dashboard from "./pages/management/Dashboard";
+import Courts from "./pages/Courts";
+import CompanyCourts from "./pages/CompanyCourts";
+import CompanyLocations from "./pages/CompanyLocations";
+import Reservations from "./pages/Reservations";
+import CompanyTimeline from "./pages/CompanyTimeline";
 
 const Navigation = ({ isAuth, isPofile }) => {
   return !(isAuth && isPofile) ? <PublicNavbar /> : <Navbar />;
@@ -37,15 +43,63 @@ function App() {
           path={`/home`}
           element={
             <PrivateRoute isAllowed={isAuth}>
-              {isCompany ? <Locations /> : <Profile />}
+              {isCompany ? <Locations isMyLocations={true} /> : <Profile />}
             </PrivateRoute>
           }
         />
         <Route
           path={`/locations`}
           element={
+            <PrivateRoute isAllowed={isAuth && isCompany}>
+              <Locations isMyLocations={true} />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/courts`}
+          element={
+            <PrivateRoute isAllowed={isAuth && !isCompany}>
+              <Courts />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/reservations`}
+          element={
+            <PrivateRoute isAllowed={isAuth && !isCompany}>
+              <Reservations />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/company/:companyId/locations`}
+          element={
             <PrivateRoute isAllowed={isAuth}>
-              {isCompany ? <Locations /> : <Navigate replace to={`login`} />}
+              <CompanyLocations />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/company/:companyId/location/:id/courts`}
+          element={
+            <PrivateRoute isAllowed={isAuth}>
+              <CompanyCourts />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/company/:companyId/location/:locationId/court/timeline/:id`}
+          element={
+            <PrivateRoute isAllowed={isAuth}>
+              <CompanyTimeline />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/dashboard`}
+          element={
+            <PrivateRoute isAllowed={isAuth && isCompany}>
+              <Dashboard />
             </PrivateRoute>
           }
         />
@@ -53,15 +107,15 @@ function App() {
           path={`/location/:id/courts/`}
           element={
             <PrivateRoute isAllowed={isAuth && isCompany}>
-              <LocationCourts />
+              <LocationCourts isMyCourts={true} />
             </PrivateRoute>
           }
         />
         <Route
           path={`location/:locationId/court/timeline/:id`}
           element={
-            <PrivateRoute isAllowed={isAuth && isCompany}>
-              <CourtTimeline />
+            <PrivateRoute isAllowed={isAuth}>
+              <CourtTimeline isMyTimeline={true} />
             </PrivateRoute>
           }
         />

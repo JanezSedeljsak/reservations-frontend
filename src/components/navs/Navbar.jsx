@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { isUserCompany } from "../../actions/user";
 import { useNavigate } from "react-router-dom";
 
-import Logo from '../../assets/LogoHorizontal.svg';
+import Logo from "../../assets/LogoHorizontal.svg";
 
 export default function () {
   const isCompany = useSelector(isUserCompany);
@@ -12,7 +12,31 @@ export default function () {
   const dispatch = useDispatch();
 
   function handleLogout() {
-    navigate('/');
+    navigate("/");
+  }
+
+  function CompanyNavItem({ name, route }) {
+    if (!isCompany) return null;
+
+    return (
+      <li className="nav-item">
+        <a className="nav-link" onClick={() => navigate(route)}>
+          {name}
+        </a>
+      </li>
+    );
+  }
+
+  function ClientNavItem({ name, route }) {
+    if (isCompany) return null;
+
+    return (
+      <li className="nav-item">
+        <a className="nav-link" onClick={() => navigate(route)}>
+          {name}
+        </a>
+      </li>
+    );
   }
 
   return (
@@ -20,32 +44,21 @@ export default function () {
       <div className="container-fluid">
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <a className="navbar-brand mt-2 mt-lg-0" href="#">
-            <img
-              src={Logo}
-              height={35}
-              alt="MDB Logo"
-              loading="lazy"
-            />
+            <img src={Logo} height={35} alt="MDB Logo" loading="lazy" />
           </a>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a
-                className="nav-link"
-                onClick={() => navigate(`/companies`)}
-              >
+              <a className="nav-link" onClick={() => navigate(`/companies`)}>
                 Companies
               </a>
             </li>
-            {isCompany ? (
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  onClick={() => navigate(`/locations`)}
-                >
-                  My locations
-                </a>
-              </li>
-            ) : null}
+
+            <CompanyNavItem name={"My locations"} route={`/locations`} />
+            <CompanyNavItem name={"Dashboard"} route={`/dashboard`} />
+
+            <ClientNavItem name={"My reservations"} route={`/reservations`} />
+            <ClientNavItem name={"Court Search"} route={`/courts`} />
+
           </ul>
         </div>
 

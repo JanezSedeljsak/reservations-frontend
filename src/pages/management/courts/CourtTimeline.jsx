@@ -3,22 +3,25 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Scheduler } from "@aldabil/react-scheduler";
 import IconButton from "../../../components/IconButton";
-import { FaBackspace } from "react-icons/fa";
+import { IoReturnUpBack } from "react-icons/io5";
 import { Card } from "@mui/material";
 import { getManagementSchedule } from '../../../actions/management';
 import { id } from "date-fns/locale";
 
-export default function () {
+export default function ({ isMyTimeline, companyId }) {
   const { id: courtId, locationId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const loading = useSelector((state) => state.management.loading);
   const timeline = useSelector(state => state.management.timeline);
-  console.log(timeline);
 
   function goBackToCourts() {
-    navigate(`/location/courts/${courtId}`);
+    if (isMyTimeline) {
+      navigate(`/location/${locationId}/courts/`);
+    } else {
+      navigate(`/company/${companyId}/location/${locationId}/courts`);
+    }
   }
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export default function () {
             <IconButton
               color="default"
               tooltip={"Go back"}
-              icon={<FaBackspace />}
+              icon={<IoReturnUpBack />}
               onClick={goBackToCourts}
             />
             <h4 style={{ marginBottom: 0 }}>Timeline</h4>
@@ -45,7 +48,7 @@ export default function () {
             navigation={true}
             disableGoToDay={true}
             events={timeline.map(event => ({
-              title: event.day_formatted,
+              title: event.title,
               event_id: id,
               start: new Date(event.start_datetime),
               end: new Date(event.end_datetime),

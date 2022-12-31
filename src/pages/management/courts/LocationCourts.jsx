@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
 import {
   FaCalendar,
-  FaBackspace,
   FaPlusCircle,
   FaCheckSquare,
 } from "react-icons/fa";
+import { IoReturnUpBack } from 'react-icons/io5';
 import { useNavigate, useParams } from "react-router-dom";
 import CourtEditModal from "../../../components/modals/CourtEditModal";
-import { getCourtTypes } from "../../../actions/common";
+import { getCourts, getCourtTypes } from "../../../actions/common";
 import { getLocationCourts } from "../../../actions/management";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,13 +25,14 @@ import {
 } from "@mui/material";
 import IconButton from "../../../components/IconButton";
 
-export default function () {
+export default function ({ isMyCourts, companyId }) {
   const { id: locationId } = useParams(); // location id
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isLoading = useSelector((state) => state.common.loading > 0);
-  const courts = useSelector((state) =>state?.management?.locationCourts ?? []);
+  const state_key = isMyCourts ? "management" : "common";
+  const isLoading = useSelector((state) => state[state_key].loading);
+  const courts = useSelector((state) => state[state_key]?.locationCourts ?? []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [courtId, setCourtId] = useState(null);
@@ -44,15 +45,27 @@ export default function () {
   // on screen load -> get court types
   useEffect(() => {
     dispatch(getCourtTypes());
-    dispatch(getLocationCourts(locationId));
+    if (isMyCourts) {
+      dispatch(getLocationCourts(locationId));
+    } else {
+      dispatch(getCourts({ location: locationId }));
+    }
   }, []);
 
   function openTimeline(court_id) {
-    navigate(`/location/${locationId}/court/timeline/${court_id}`);
+    if (isMyCourts) {
+      navigate(`/location/${locationId}/court/timeline/${court_id}`);
+    } else {
+      navigate(`/company/${companyId}/location/${locationId}/court/timeline/${court_id}`)
+    }
   }
 
   function goBackToLocations() {
-    navigate(`/locations`);
+    if (isMyCourts) {
+      navigate(`/locations`);
+    } else {
+      navigate(`/company/${companyId}/locations`);
+    }
   }
 
   const RenderDataTable = () => {
@@ -80,12 +93,12 @@ export default function () {
                   {court?.is_outside ? <FaCheckSquare size={16} /> : null}
                 </StyledTableCell>
                 <StyledTableCell sx={{ width: 250 }} align="right">
-                  <IconButton
+                  {isMyCourts && <IconButton
                     color="primary"
                     tooltip={"Edit court"}
                     icon={<GoPencil size={20} />}
                     onClick={() => openCourtEditModal(court.id)}
-                  />
+                  />}
                   <IconButton
                     color="default"
                     tooltip={"Show court timeline"}
@@ -110,16 +123,16 @@ export default function () {
               <IconButton
                 color="default"
                 tooltip={"Go back"}
-                icon={<FaBackspace />}
+                icon={<IoReturnUpBack />}
                 onClick={goBackToLocations}
               />
               <h4 style={{ marginBottom: 0 }}>Courts</h4>
-              <IconButton
+              {isMyCourts && <IconButton
                 color="primary"
                 tooltip={"Add new court"}
                 icon={<FaPlusCircle />}
                 onClick={() => openCourtEditModal(null)}
-              />
+              />}
             </div>
             <div className="input-group rounded" style={{ width: 300 }}>
               <input
@@ -134,7 +147,7 @@ export default function () {
               </span>
             </div>
           </div>
-          {isLoading ? "Loading..." : RenderDataTable()}
+          {RenderDataTable()}
         </div>
       </div>
       <CourtEditModal
