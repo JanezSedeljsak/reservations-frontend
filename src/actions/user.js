@@ -14,7 +14,7 @@ export const userLogin = ({ username, password }) => {
         }).then((res) => {
             dispatch({ type: TYPE.USER_LOGIN_SUCCESS, payload: { accessToken: res?.access, refreshToken: res?.refresh } });
             dispatch(getCurrentUser());
-            dispatch(getCompanies());
+            dispatch(getCompanies({}));
         }).catch((_) => {
             dispatch({ type: TYPE.USER_LOGIN_FAIL });
             toast.warning("Login failed");

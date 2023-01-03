@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoLocation, GoPencil } from "react-icons/go";
 import { FaPlusCircle } from "react-icons/fa";
 import { TbSoccerField } from "react-icons/tb";
 import LocationEditModal from "../../components/modals/LocationEditModal";
+import { useDebounce } from "../../actions/helpers";
 import {
   Paper,
   TableRow,
@@ -12,22 +13,27 @@ import {
   TableContainer,
   TableBody,
   Table,
+  Box,
+  CircularProgress,
 } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from "../../components/StyledTable";
 import IconButton from "../../components/IconButton";
-import { useEffect } from "react";
 import { getLocations } from "../../actions/common";
+import { getManagementLocations } from "../../actions/management";
 
 export default function ({ isMyLocations, companyId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const storeKey = isMyLocations ? 'management' : 'common';
+  const storeKey = isMyLocations ? "management" : "common";
   const loading = useSelector((state) => state[storeKey].loading);
   const locations = useSelector((state) => state[storeKey]?.locations ?? []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [locationId, setLocationId] = useState(null);
+
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 200);
 
   function openLocationEditModal(location_id) {
     setLocationId(location_id);
@@ -36,9 +42,17 @@ export default function ({ isMyLocations, companyId }) {
 
   useEffect(() => {
     if (!isMyLocations) {
-      dispatch(getLocations({companyId}))
+      dispatch(getLocations({ companyId }));
     }
   }, []);
+
+  useEffect(() => {
+    if (!isMyLocations) {
+      dispatch(getLocations({ companyId, search }));
+    } else {
+      dispatch(getManagementLocations({ search }));
+    }
+  }, [debouncedSearch]);
 
   function openCourts(id) {
     if (isMyLocations) {
@@ -49,6 +63,14 @@ export default function ({ isMyLocations, companyId }) {
   }
 
   const RenderDataTable = () => {
+    if (loading) {
+      return (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      );
+    }
+
     return (
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -68,12 +90,14 @@ export default function ({ isMyLocations, companyId }) {
                 </StyledTableCell>
                 <StyledTableCell>{location.name}</StyledTableCell>
                 <StyledTableCell align="right">
-                  {isMyLocations && <IconButton
-                    icon={<GoPencil />}
-                    color="primary"
-                    tooltip={"Edit location"}
-                    onClick={() => openLocationEditModal(location.id)}
-                  />}
+                  {isMyLocations && (
+                    <IconButton
+                      icon={<GoPencil />}
+                      color="primary"
+                      tooltip={"Edit location"}
+                      onClick={() => openLocationEditModal(location.id)}
+                    />
+                  )}
                   <IconButton
                     color="default"
                     icon={<TbSoccerField />}
@@ -99,14 +123,18 @@ export default function ({ isMyLocations, companyId }) {
       <div className="center" style={{ marginTop: 20 }}>
         <div className="main-container">
           <div className="page-header header-row">
-          <div className="page-header">
-              <h4 style={{ marginBottom: 0 }}>{!isMyLocations ? "Company locations" : "My locations"}</h4>
-              {isMyLocations && <IconButton
-                color="primary"
-                tooltip={"Add new location"}
-                icon={<FaPlusCircle />}
-                onClick={() => openLocationEditModal(null)}
-              />}
+            <div className="page-header">
+              <h4 style={{ marginBottom: 0 }}>
+                {!isMyLocations ? "Company locations" : "My locations"}
+              </h4>
+              {isMyLocations && (
+                <IconButton
+                  color="primary"
+                  tooltip={"Add new location"}
+                  icon={<FaPlusCircle />}
+                  onClick={() => openLocationEditModal(null)}
+                />
+              )}
             </div>
             <div className="input-group rounded" style={{ width: 300 }}>
               <input
@@ -115,6 +143,7 @@ export default function ({ isMyLocations, companyId }) {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="search-addon"
+                onChange={(event) => setSearch(event.target.value)}
               />
               <span className="input-group-text border-0" id="search-addon">
                 <i className="fas fa-search"></i>

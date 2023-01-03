@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 export const API = "https://lp0667.pythonanywhere.com/api";
 
 export function asFormData(jsonData) {
@@ -7,6 +9,20 @@ export function asFormData(jsonData) {
     }
 
     return form_data;
+}
+
+export function useDebounce(value, delay) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setDebouncedValue(value), delay || 500)
+
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [value, delay])
+
+    return debouncedValue
 }
 
 export function apiRequest({ url, method, body, okStatus, token }) {

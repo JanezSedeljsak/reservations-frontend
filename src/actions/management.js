@@ -1,12 +1,17 @@
 import * as TYPE from '../store/types';
 import { asFormData, apiRequest } from './helpers';
 
-export const getManagementLocations = () => {
+export const getManagementLocations = filters => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
+        let url = '/management/locations/';
+        if (filters?.search) {
+            url += `?search=${filters.search}`;
+        }
+
         dispatch({ type: TYPE.MANAGEMENT_GET_LOCATIONS_START });
         apiRequest({
-            url: '/management/locations/',
+            url,
             method: 'GET',
             token: accessToken
         }).then((res) => {
@@ -55,12 +60,17 @@ export const updateManagementLocation = ({ id, name, latitude, longitude, owner,
     }
 }
 
-export const getLocationCourts = (locationId) => {
+export const getLocationCourts = (filters) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
+        let url = `/management/locations/${filters?.locationId}/courts/`;
+        if (filters?.search) {
+            url += `?search=${filters.search}`;
+        }
+
         dispatch({ type: TYPE.MANAGEMENT_GET_LOCATION_COURTS_START });
         apiRequest({
-            url: `/management/locations/${locationId}/courts/`,
+            url,
             method: 'GET',
             token: accessToken
         }).then((res) => {

@@ -1,12 +1,17 @@
 import * as TYPE from '../store/types';
 import { asFormData, apiRequest } from './helpers';
 
-export const getCompanies = () => {
+export const getCompanies = (filters) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
+        let url = '/users/?is_company=1';
+        if (filters?.search) {
+            url += `&search=${filters.search}`;
+        }
+
         dispatch({ type: TYPE.COMMON_GET_COMPANIES_START });
         apiRequest({
-            url: '/users/?is_company=1',
+            url,
             method: 'GET',
             token: accessToken
         }).then((res) => {
@@ -39,12 +44,17 @@ export const getCourtTypes = () => {
     };
 }
 
-export const getLocations = ({ companyId }) => {
+export const getLocations = filters => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
+        let url = `/locations/?owner=${filters.companyId}`;
+        if (filters?.search) {
+            url += `&search=${filters.search}`;
+        }
+
         dispatch({ type: TYPE.COMMON_GET_LOCATIONS_START });
         apiRequest({
-            url: `/locations/?owner=${companyId}`,
+            url,
             method: 'GET',
             token: accessToken
         }).then((res) => {

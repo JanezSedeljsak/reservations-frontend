@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { GoLocation, GoPencil } from "react-icons/go";
-import { Input } from "../components/form";
-import UserIcon from '../assets/usericon.png';
+import UserIcon from "../assets/usericon.png";
+import { getCompanies } from "../actions/common";
+import { useDebounce } from "../actions/helpers";
+import { Box, CircularProgress } from "@mui/material";
 
 export default function () {
   const dispatch = useDispatch();
@@ -12,9 +13,16 @@ export default function () {
   const loading = useSelector((state) => state.common.loading);
   const companies = useSelector((state) => state.common?.companies ?? []);
 
-  const getAvatar = company => {
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 200);
+
+  useEffect(() => {
+    dispatch(getCompanies({ search }));
+  }, [debouncedSearch]);
+
+  const getAvatar = (company) => {
     return company?.avatar ?? UserIcon;
-  }
+  };
 
   function openCompanyLocations(companyId) {
     navigate(`/company/${companyId}/locations`);
@@ -22,18 +30,19 @@ export default function () {
 
   const renderCompany = (company) => (
     <div className="card" key={company.id}>
-      <div className="card-header" style={{ alignItems: 'center'}}>
+      <div className="card-header" style={{ alignItems: "center" }}>
         <img src={getAvatar(company)} width={30} height={30} />
         <span style={{ marginLeft: 10 }}>{company.full_name}</span>
       </div>
       <div className="card-body">
         <h5 className="card-title">{company.email}</h5>
-        <p className="card-text">
-          {company.bio}
-        </p>
+        <p className="card-text">{company.bio}</p>
       </div>
       <div className="card-footer text-muted">
-        <button className="btn btn-primary btn-rounded" onClick={() => openCompanyLocations(company.id)}>
+        <button
+          className="btn btn-primary btn-rounded"
+          onClick={() => openCompanyLocations(company.id)}
+        >
           Check locations
         </button>
       </div>
@@ -59,13 +68,22 @@ export default function () {
               placeholder="Search"
               aria-label="Search"
               aria-describedby="search-addon"
+              onChange={(event) => setSearch(event.target.value)}
             />
             <span className="input-group-text border-0" id="search-addon">
               <i className="fas fa-search"></i>
             </span>
           </div>
         </h4>
-        <div style={{ marginTop: 10 }} className="card-body grid-3">{companies.map(renderCompany)}</div>
+        <div style={{ marginTop: 10 }} className="card-body grid-3">
+          {loading ? (
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            companies.map(renderCompany)
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
-import {
-  FaCalendar,
-  FaPlusCircle,
-  FaCheckSquare,
-} from "react-icons/fa";
-import { IoReturnUpBack } from 'react-icons/io5';
+import { FaCalendar, FaPlusCircle, FaCheckSquare } from "react-icons/fa";
+import { IoReturnUpBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import CourtEditModal from "../../../components/modals/CourtEditModal";
 import { getCourts, getCourtTypes } from "../../../actions/common";
@@ -22,8 +18,11 @@ import {
   TableContainer,
   TableBody,
   Table,
+  Box,
+  CircularProgress
 } from "@mui/material";
 import IconButton from "../../../components/IconButton";
+import { useDebounce } from "../../../actions/helpers";
 
 export default function ({ isMyCourts, companyId }) {
   const { id: locationId } = useParams(); // location id
@@ -33,6 +32,17 @@ export default function ({ isMyCourts, companyId }) {
   const state_key = isMyCourts ? "management" : "common";
   const isLoading = useSelector((state) => state[state_key].loading);
   const courts = useSelector((state) => state[state_key]?.locationCourts ?? []);
+
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 200);
+
+  useEffect(() => {
+    if (isMyCourts) {
+      dispatch(getLocationCourts({ locationId, search }));
+    } else {
+      dispatch(getCourts({ location: locationId, search }));
+    }
+  }, [debouncedSearch]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [courtId, setCourtId] = useState(null);
@@ -46,7 +56,7 @@ export default function ({ isMyCourts, companyId }) {
   useEffect(() => {
     dispatch(getCourtTypes());
     if (isMyCourts) {
-      dispatch(getLocationCourts(locationId));
+      dispatch(getLocationCourts({locationId}));
     } else {
       dispatch(getCourts({ location: locationId }));
     }
@@ -56,7 +66,9 @@ export default function ({ isMyCourts, companyId }) {
     if (isMyCourts) {
       navigate(`/location/${locationId}/court/timeline/${court_id}`);
     } else {
-      navigate(`/company/${companyId}/location/${locationId}/court/timeline/${court_id}`)
+      navigate(
+        `/company/${companyId}/location/${locationId}/court/timeline/${court_id}`
+      );
     }
   }
 
@@ -69,6 +81,14 @@ export default function ({ isMyCourts, companyId }) {
   }
 
   const RenderDataTable = () => {
+    if (isLoading) {
+      return (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      );
+    }
+
     return (
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -93,12 +113,14 @@ export default function ({ isMyCourts, companyId }) {
                   {court?.is_outside ? <FaCheckSquare size={16} /> : null}
                 </StyledTableCell>
                 <StyledTableCell sx={{ width: 250 }} align="right">
-                  {isMyCourts && <IconButton
-                    color="primary"
-                    tooltip={"Edit court"}
-                    icon={<GoPencil size={20} />}
-                    onClick={() => openCourtEditModal(court.id)}
-                  />}
+                  {isMyCourts && (
+                    <IconButton
+                      color="primary"
+                      tooltip={"Edit court"}
+                      icon={<GoPencil size={20} />}
+                      onClick={() => openCourtEditModal(court.id)}
+                    />
+                  )}
                   <IconButton
                     color="default"
                     tooltip={"Show court timeline"}
@@ -127,12 +149,14 @@ export default function ({ isMyCourts, companyId }) {
                 onClick={goBackToLocations}
               />
               <h4 style={{ marginBottom: 0 }}>Courts</h4>
-              {isMyCourts && <IconButton
-                color="primary"
-                tooltip={"Add new court"}
-                icon={<FaPlusCircle />}
-                onClick={() => openCourtEditModal(null)}
-              />}
+              {isMyCourts && (
+                <IconButton
+                  color="primary"
+                  tooltip={"Add new court"}
+                  icon={<FaPlusCircle />}
+                  onClick={() => openCourtEditModal(null)}
+                />
+              )}
             </div>
             <div className="input-group rounded" style={{ width: 300 }}>
               <input
@@ -141,6 +165,7 @@ export default function ({ isMyCourts, companyId }) {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="search-addon"
+                onChange={event => setSearch(event.target.value)}
               />
               <span className="input-group-text border-0" id="search-addon">
                 <i className="fas fa-search"></i>
