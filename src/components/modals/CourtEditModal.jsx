@@ -1,12 +1,11 @@
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import { SubmitButton, Input, Select, CheckBox } from "../form";
 
 export default function ({ isVisible, setVisible, courtId }) {
-  const loading = useSelector((state) => state.common.loading > 0);
+  const loading = useSelector((state) => state.common.loading);
   const courtTypes = useSelector((state) => state.common.courtTypes);
   const isCreate = courtId === null;
 

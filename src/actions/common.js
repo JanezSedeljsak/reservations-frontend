@@ -58,12 +58,31 @@ export const getLocations = ({ companyId }) => {
     };
 }
 
-export const getCourts = ({ location }) => {
+export const getCourts = filters => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.COMMON_GET_COURTS_START });
+        let url = `/courts/`;
+        if (Object.keys(filters).length) {
+            url += '?';
+        }
+
+        if (filters?.location) {
+            url += `location=${filters.location}`;
+        }
+
+        if (filters?.search) {
+            if (url[url.length - 1] !== '?') url += '&';
+            url += `search=${filters.search}`;
+        }
+
+        if (filters?.courtType) {
+            if (url[url.length - 1] !== '?') url += '&';
+            url += `court_types=${filters.courtType}`;
+        }
+
         apiRequest({
-            url: `/courts/?location=${location}`,
+            url,
             method: 'GET',
             token: accessToken
         }).then((res) => {

@@ -1,8 +1,8 @@
 import { TextField, FormControl } from "@mui/material";
 
-export default ({ reference, id, label, type, value }) => {  
+export default ({ reference, id, label, type, value, noMargin }) => {  
   return (
-    <FormControl sx={{ mx: 'auto', my: 2 }} fullWidth>
+    <FormControl sx={{ mx: 'auto', my: noMargin ? 0 : 2 }} fullWidth>
       <TextField
         id={id}
         label={label ?? id}
