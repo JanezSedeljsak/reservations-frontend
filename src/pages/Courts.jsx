@@ -26,6 +26,7 @@ export default function () {
   const isLoading = useSelector((state) => state.common.loading);
   const courts = useSelector((state) => state.common.locationCourts ?? []);
   const courtTypes = useSelector((state) => state.common.courtTypes);
+  console.log(courts);
 
   const courtTypeRef = useRef(null);
   const searchRef = useRef(null);
@@ -68,6 +69,7 @@ export default function () {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
+              <StyledTableCell>Location</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell sx={{ width: 100 }} align="center">
                 Is outside
@@ -80,6 +82,9 @@ export default function () {
           <TableBody>
             {courts.map((court) => (
               <StyledTableRow key={court.id}>
+                <StyledTableCell component="th">
+                  {court?.location?.name ?? 'No location'}
+                </StyledTableCell>
                 <StyledTableCell component="th" scope="court">
                   {court.name}
                 </StyledTableCell>
@@ -114,7 +119,7 @@ export default function () {
                 <Select
                   id={"type"}
                   reference={courtTypeRef}
-                  options={courtTypes}
+                  options={[{id: null, name: '/'}, ...courtTypes]}
                 />
                 <SubmitButton label={"Filter"} onPress={filter} />
               </CardContent>
