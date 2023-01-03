@@ -1,5 +1,5 @@
 import * as TYPE from '../store/types';
-import { asFormData, apiRequest } from './helpers';
+import { apiRequest } from './helpers';
 
 export const getCompanies = (filters) => {
     return async (dispatch, getState) => {

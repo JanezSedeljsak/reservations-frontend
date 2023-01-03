@@ -5,7 +5,7 @@ const initialState = {
     courtTypes: [],
     locationCourts: [],
     locations: [],
-    loading: 0
+    loading: false
 };
 
 export default function (state = initialState, action) {
