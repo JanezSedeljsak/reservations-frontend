@@ -102,3 +102,22 @@ export const getManagementSchedule = ({ location, court }) => {
         });
     }
 };
+
+export const getManagementAnalytics = ()  => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_GET_ANALYTICS_START });
+        apiRequest({
+            url: `/management/analytics/`,
+            method: 'GET',
+            token: accessToken
+        }).then((res) => {
+            dispatch({
+                type: TYPE.MANAGEMENT_GET_ANALYTICS_SUCCESS,
+                payload: { analytics: res ?? [] }
+            });
+        }).catch((_) => {
+            dispatch({ type: TYPE.MANAGEMENT_GET_ANALYTICS_FAIL});
+        });
+    }
+}

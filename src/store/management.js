@@ -4,6 +4,7 @@ const initialState = {
     locations: [],
     timeline: [],
     locationCourts: [],
+    analytics: [],
     loading: false
 };
 
@@ -29,6 +30,13 @@ export default function (state = initialState, action) {
             return { ...state, loading: false, timeline: action.payload.timeline };
         case TYPE.MANAGEMENT_GET_SCHEDULE_FAIL:
             return { ...state, loading: false, timeline: [] };
+
+        case TYPE.MANAGEMENT_GET_ANALYTICS_START:
+            return { ...state, loading: true, analytics: [] };
+        case TYPE.MANAGEMENT_GET_ANALYTICS_SUCCESS:
+            return { ...state, loading: false, analytics: action.payload.analytics };
+        case TYPE.MANAGEMENT_GET_ANALYTICS_FAIL:
+            return { ...state, loading: false, analytics: [] };
 
         default:
             return state;
