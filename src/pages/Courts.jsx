@@ -92,7 +92,7 @@ export default function () {
             {courts.map((court) => (
               <StyledTableRow key={court.id}>
                 <StyledTableCell component="th">
-                  {handleCourtLocation(court)}
+                  Test
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="court">
                   {court.name}
