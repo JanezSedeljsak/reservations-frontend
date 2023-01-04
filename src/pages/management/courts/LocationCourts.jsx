@@ -45,7 +45,7 @@ export default function ({ isMyCourts, companyId }) {
   const location = useSelector((state) => state?.common?.locationDetail ?? {});
 
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 200);
+  const debouncedSearch = useDebounce(search, 400);
 
   useEffect(() => {
     if (isMyCourts) {
@@ -70,11 +70,11 @@ export default function ({ isMyCourts, companyId }) {
   }
 
   function handleTitle() {
-    if (!location?.name || !location.city) {
+    if (!location?.name || !location?.city?.name) {
       return "Courts";
     }
 
-    return `Courts - ${location.name} (${location.city})`;
+    return `Courts - ${location.name} (${location.city.name})`;
   }
 
   // on screen load -> get court types
@@ -179,6 +179,8 @@ export default function ({ isMyCourts, companyId }) {
           isVisible={modalVisible}
           setVisible={setModalVisible}
           courtId={courtId}
+          locationId={locationId}
+          search={search}
         />
         <CourtDetailModal
           isVisible={detailModalVisible}

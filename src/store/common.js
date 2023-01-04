@@ -7,6 +7,7 @@ const initialState = {
     locations: [],
     locationDetail: {},
     courtDetail: {},
+    cities: [],
     loading: false
 };
 
@@ -53,6 +54,13 @@ export default function (state = initialState, action) {
             return { ...state, loading: false, locationDetail: action.payload.locationDetail };
         case TYPE.COMMON_GET_LOCATION_DETAIL_FAIL:
             return { ...state, loading: false, locationDetail: {} };
+
+        case TYPE.COMMON_GET_CITIES_START:
+            return { ...state, loading: true, cities: [] };
+        case TYPE.COMMON_GET_CITIES_SUCCESS:
+            return { ...state, loading: false, cities: action.payload.cities };
+        case TYPE.COMMON_GET_CITIES_FAIL:
+            return { ...state, loading: false, cities: {} };
 
         default:
             return state;

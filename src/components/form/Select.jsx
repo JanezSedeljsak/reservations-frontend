@@ -4,7 +4,7 @@ import Select from "@mui/material/Select";
 export default ({ reference, id, label, value, options }) => {
   return (
     <FormControl fullWidth>
-      <InputLabel id={id}>Type</InputLabel>
+      <InputLabel id={id}>{label ?? id}</InputLabel>
       <Select
         labelId={id}
         label={label ?? id}

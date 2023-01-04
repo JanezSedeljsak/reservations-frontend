@@ -18,7 +18,6 @@ export default ({ isVisible, setVisible, courtId }) => {
   const dispatch = useDispatch();
   const court = useSelector((state) => state?.common?.courtDetail ?? {});
   const loading = useSelector((state) => state.common.loading);
-  console.log(court);
 
   useEffect(() => {
     if (isVisible && courtId) {

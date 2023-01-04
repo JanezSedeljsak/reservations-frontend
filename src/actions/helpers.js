@@ -16,7 +16,7 @@ export function handleCourtLocation(court) {
         return "";
     }
 
-    let str = court?.location?.city || "";
+    let str = court?.location?.city?.name || "";
     if (str.length) {
         str += " - ";
     }

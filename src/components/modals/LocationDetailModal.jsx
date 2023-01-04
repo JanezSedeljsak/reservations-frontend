@@ -40,7 +40,7 @@ export default ({ isVisible, setVisible, locationId }) => {
             {location?.name}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {location?.city}
+            {location?.city?.name}
           </Typography>
           <Typography variant="body2">
             <FaMailBulk /> {location?.email}

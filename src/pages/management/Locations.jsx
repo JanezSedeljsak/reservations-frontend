@@ -35,7 +35,7 @@ export default function ({ isMyLocations, companyId }) {
   const [locationId, setLocationId] = useState(null);
 
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 200);
+  const debouncedSearch = useDebounce(search, 400);
 
   function openLocationDetailModal(location_id) {
     setLocationId(location_id);
@@ -84,7 +84,7 @@ export default function ({ isMyLocations, companyId }) {
           <TableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Contact</StyledTableCell>
+              <StyledTableCell>City</StyledTableCell>
               <StyledTableCell align="right">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -95,7 +95,7 @@ export default function ({ isMyLocations, companyId }) {
                   <GoLocation size={20} />
                   <span style={{ marginLeft: 10 }}>{location.name}</span>
                 </StyledTableCell>
-                <StyledTableCell>{location.name}</StyledTableCell>
+                <StyledTableCell>{location.city?.name}</StyledTableCell>
                 <StyledTableCell align="right">
                   {isMyLocations && (
                     <IconButton
@@ -133,6 +133,7 @@ export default function ({ isMyLocations, companyId }) {
           isVisible={modalVisible}
           setVisible={setModalVisible}
           locationId={locationId}
+          search={search}
         />
         <LocationDetailModal
           isVisible={detailModalVisible}

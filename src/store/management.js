@@ -5,17 +5,18 @@ const initialState = {
     timeline: [],
     locationCourts: [],
     analytics: [],
-    loading: false
+    loading: false,
+    actionInProgress: false,
 };
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case TYPE.MANAGEMENT_GET_LOCATIONS_START:
-            return {...state, loading: true, locations: [] };
+            return { ...state, loading: true, locations: [] };
         case TYPE.MANAGEMENT_GET_LOCATIONS_SUCCESS:
-            return {...state, loading: false, locations: action.payload.locations };
+            return { ...state, loading: false, locations: action.payload.locations };
         case TYPE.MANAGEMENT_GET_LOCATIONS_FAIL:
-            return {...state, loading: false, locations: [] };
+            return { ...state, loading: false, locations: [] };
 
         case TYPE.MANAGEMENT_GET_LOCATION_COURTS_START:
             return { ...state, loading: true, locationCourts: [] };
@@ -37,6 +38,22 @@ export default function (state = initialState, action) {
             return { ...state, loading: false, analytics: action.payload.analytics };
         case TYPE.MANAGEMENT_GET_ANALYTICS_FAIL:
             return { ...state, loading: false, analytics: [] };
+
+        case TYPE.MANAGEMENT_COURTS_CREATE_START:
+        case TYPE.MANAGEMENT_COURTS_UPDATE_START:
+        case TYPE.MANAGEMENT_LOCATIONS_CREATE_START:
+        case TYPE.MANAGEMENT_LOCATIONS_UPDATE_START:
+            return { ...state, actionInProgress: true };
+
+        case TYPE.MANAGEMENT_COURTS_CREATE_SUCCESS:
+        case TYPE.MANAGEMENT_COURTS_UPDATE_SUCCESS:
+        case TYPE.MANAGEMENT_LOCATIONS_CREATE_SUCCESS:
+        case TYPE.MANAGEMENT_LOCATIONS_UPDATE_SUCCESS:
+        case TYPE.MANAGEMENT_COURTS_CREATE_FAIL:
+        case TYPE.MANAGEMENT_COURTS_UPDATE_FAIL:
+        case TYPE.MANAGEMENT_LOCATIONS_CREATE_FAIL:
+        case TYPE.MANAGEMENT_LOCATIONS_UPDATE_FAIL:
+            return { ...state, actionInProgress: false };
 
         default:
             return state;

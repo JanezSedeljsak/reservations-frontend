@@ -143,3 +143,22 @@ export const getCourtDetail = id => {
         });
     };
 }
+
+export const getCities = () => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.COMMON_GET_CITIES_START });
+        apiRequest({
+            url: '/citys/',
+            method: 'GET',
+            token: accessToken
+        }).then((res) => {
+            dispatch({
+                type: TYPE.COMMON_GET_CITIES_SUCCESS,
+                payload: { cities: res ?? [] }
+            });
+        }).catch((_) => {
+            dispatch({ type: TYPE.COMMON_GET_CITIES_FAIL });
+        });
+    };
+}

@@ -14,7 +14,7 @@ export default function () {
   const companies = useSelector((state) => state.common?.companies ?? []);
 
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 200);
+  const debouncedSearch = useDebounce(search, 400);
 
   useEffect(() => {
     dispatch(getCompanies({ search }));

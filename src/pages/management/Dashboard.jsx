@@ -111,11 +111,11 @@ export default () => {
           name: log?.court?.name,
         };
       } else if (log.log_type === "location_detail") {
-        const key = log?.locaiton?.id;
+        const key = log?.location?.id;
         if (!key) continue;
 
         locationCounter[key] = {
-          count: 1 + (courtsCounter?.[key] ?? 0),
+          count: 1 + (locationCounter?.[key]?.count ?? 0),
           name: log?.location?.name,
         };
       }

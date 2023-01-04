@@ -1,4 +1,6 @@
+import { toast } from 'react-toastify';
 import * as TYPE from '../store/types';
+import { getCourtDetail, getLocationDetail } from './common';
 import { asFormData, apiRequest } from './helpers';
 
 export const getManagementLocations = filters => {
@@ -25,37 +27,86 @@ export const getManagementLocations = filters => {
     }
 }
 
-export const createManagementLocation = ({ name, latitude, longitude, website_url }) => {
+export const createManagementLocation = ({ name, latitude, longitude, website_url, phone_number, email, city }, filters) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_CREATE_START });
         apiRequest({
             url: '/management/locations/',
-            body: asFormData({ name, latitude, longitude, website_url }),
+            body: asFormData({ name, latitude, longitude, website_url, city, phone_number, email, is_active: true }),
             method: 'POST',
             token: accessToken,
             okStatus: 201
         }).then((_) => {
+            toast.success('Created new location!');
             dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_CREATE_SUCCESS });
+            dispatch(getManagementLocations(filters));
         }).catch((_) => {
+            toast.error('Failed to create new location!');
             dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_CREATE_FAIL });
         });
     }
 }
 
-export const updateManagementLocation = ({ id, name, latitude, longitude, owner, website_url }) => {
+export const updateManagementLocation = ({ id, name, latitude, longitude, website_url, phone_number, email, city }, filters) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_UPDATE_START });
         apiRequest({
-            url: `/management/locations/${id}`,
-            body: asFormData({ name, latitude, longitude, owner, website_url }),
-            method: 'PUT',
+            url: `/management/locations/${id}/`,
+            body: asFormData({ name, latitude, longitude, website_url, city, phone_number, email, is_active: true }),
+            method: 'PATCH',
             token: accessToken,
         }).then((_) => {
+            toast.success('Updated location!');
             dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_UPDATE_SUCCESS });
+            dispatch(getManagementLocations(filters));
+            dispatch(getLocationDetail(id));
         }).catch((_) => {
+            toast.error('Failed to update location!');
             dispatch({ type: TYPE.MANAGEMENT_LOCATIONS_UPDATE_FAIL });
+        });
+    }
+}
+
+export const createManagementCourt = ({ name, court_types, is_outside, locationId }, filters) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_COURTS_CREATE_START });
+        apiRequest({
+            url: `/management/locations/${locationId}/courts/`,
+            body: asFormData({ name, court_types, is_outside, is_active: true }),
+            method: 'POST',
+            token: accessToken,
+            okStatus: 201
+        }).then((_) => {
+            toast.success('Created new location!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_CREATE_SUCCESS });
+            dispatch(getLocationCourts({...filters, locationId }));
+        }).catch((_) => {
+            toast.error('Failed to create new location!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_CREATE_FAIL });
+        });
+    }
+}
+
+export const updateManagementCourt = ({ id, name, court_types, is_outside, locationId }, filters) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_COURTS_UPDATE_START });
+        apiRequest({
+            url: `/management/locations/${locationId}/courts/${id}/`,
+            body: asFormData({ name, court_types, is_outside, is_active: true }),
+            method: 'PATCH',
+            token: accessToken,
+        }).then((_) => {
+            toast.success('Updated location!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_UPDATE_SUCCESS });
+            dispatch(getLocationCourts({...filters, locationId }));
+            dispatch(getCourtDetail(id));
+        }).catch((_) => {
+            toast.error('Failed to update location!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_UPDATE_FAIL });
         });
     }
 }
@@ -103,12 +154,12 @@ export const getManagementSchedule = ({ location, court }) => {
     }
 };
 
-export const getManagementAnalytics = ()  => {
+export const getManagementAnalytics = () => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_GET_ANALYTICS_START });
         apiRequest({
-            url: `/management/analytics/?type=court_detail`,
+            url: `/management/analytics/?type=court_detail,location_detail`,
             method: 'GET',
             token: accessToken
         }).then((res) => {
@@ -117,7 +168,7 @@ export const getManagementAnalytics = ()  => {
                 payload: { analytics: res ?? [] }
             });
         }).catch((_) => {
-            dispatch({ type: TYPE.MANAGEMENT_GET_ANALYTICS_FAIL});
+            dispatch({ type: TYPE.MANAGEMENT_GET_ANALYTICS_FAIL });
         });
     }
 }

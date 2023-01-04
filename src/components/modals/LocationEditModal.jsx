@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import LocationPicker from "react-location-picker";
+import {
+  createManagementLocation,
+  updateManagementLocation,
+} from "../../actions/management";
 
 const defaultPosition = {
   lat: 46.05095064016724,
@@ -10,25 +14,39 @@ const defaultPosition = {
 };
 
 import { useDispatch, useSelector } from "react-redux";
-import { Input, SubmitButton } from "../form";
+import { Input, Select, SubmitButton } from "../form";
+import { getLocationDetail } from "../../actions/common";
 
-export default function ({ isVisible, setVisible, locationId, mode }) {
-  const loading = useSelector((state) => state.management.loading);
+export default function ({ isVisible, setVisible, locationId, search }) {
+  const loading = useSelector(
+    (state) => state.management.loading || state.common.loading
+  );
+  const inProgress = useSelector(
+    (state) => state?.management?.actionInProgress ?? false
+  );
+  const location = useSelector((state) => state?.common?.locationDetail ?? {});
+  const cities = useSelector((state) => state?.common?.cities ?? []);
+
   const isCreate = locationId === null;
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneNumberRef = useRef(null);
   const urlRef = useRef(null);
+  const cityRef = useRef(null);
 
   const [position, setPosition] = useState(defaultPosition);
 
   useEffect(() => {
+    if (!loading && Object.keys(location)?.length) {
+      setPosition({ lat: location.latitude, lng: location.longitude });
+    }
+  }, [location, loading]);
+
+  useEffect(() => {
     if (!isCreate && isVisible) {
-      console.log("load existing location");
+      dispatch(getLocationDetail(locationId));
     }
   }, [locationId, isVisible]);
 
@@ -36,19 +54,86 @@ export default function ({ isVisible, setVisible, locationId, mode }) {
     setPosition(event.position);
   }
 
-  function handleLocationUpdate() {
+  function prepareData() {
     const location = {
       name: nameRef.current.value,
       email: emailRef.current.value,
       phone_number: phoneNumberRef.current.value,
-      website_url: urlRef.current.value
+      website_url: urlRef.current.value,
+      city: cityRef.current.value,
     };
 
-    console.log(location, position);
+    return { ...location, latitude: position.lat, longitude: position.lng };
+  }
+
+  function handleLocationUpdate(event) {
+    event.preventDefault();
+    const data = prepareData();
+    dispatch(updateManagementLocation({ ...data, id: locationId }, { search }));
+  }
+
+  function handleLocationCreate(event) {
+    event.preventDefault();
+    const data = prepareData();
+    dispatch(createManagementLocation(data, { search }));
   }
 
   if (!isVisible) {
     return null;
+  }
+
+  function renderForm() {
+    if (loading) {
+      return <CircularProgress />;
+    }
+
+    return (
+      <>
+        <Input
+          reference={nameRef}
+          id={"name"}
+          value={!isCreate ? location.name : ""}
+        />
+        <Select
+          reference={cityRef}
+          id={"city"}
+          label={"city"}
+          value={!isCreate ? location.city.id : cities?.[0]?.id ?? -1}
+          options={cities}
+        />
+        <Input
+          reference={emailRef}
+          type={"email"}
+          id={"email"}
+          value={!isCreate ? location.email : ""}
+        />
+
+        <Input
+          reference={urlRef}
+          id={"website_url"}
+          label={"website url"}
+          value={!isCreate ? location.website_url : ""}
+        />
+        <Input
+          reference={phoneNumberRef}
+          id={"phone_number"}
+          label={"phone number"}
+          value={!isCreate ? location.phone_number : ""}
+        />
+        <LocationPicker
+          containerElement={<div />}
+          mapElement={<div style={{ height: 200 }} />}
+          defaultPosition={position}
+          onChange={handleChangePosition}
+        />
+
+        <SubmitButton
+          onPress={isCreate ? handleLocationCreate : handleLocationUpdate}
+          label={isCreate ? "Create location" : "Update location"}
+          loading={inProgress}
+        />
+      </>
+    );
   }
 
   return (
@@ -61,26 +146,7 @@ export default function ({ isVisible, setVisible, locationId, mode }) {
     >
       <Box sx={{ width: 700, m: 2 }} role="presentation">
         <h5>Location form</h5>
-        <Input reference={nameRef} id={"name"} />
-        <Input reference={emailRef} type={"email"} id={"email"} />
-        <Input reference={urlRef} id={"website_url"} label={"website url"} />
-        <Input
-          reference={phoneNumberRef}
-          id={"phone_number"}
-          label={"phone number"}
-        />
-        <LocationPicker
-          containerElement={<div />}
-          mapElement={<div style={{ height: 200 }} />}
-          defaultPosition={defaultPosition}
-          onChange={handleChangePosition}
-        />
-
-        <SubmitButton
-          onPress={handleLocationUpdate}
-          label={"Update location"}
-          loading={loading}
-        />
+        {renderForm()}
       </Box>
     </SwipeableDrawer>
   );

@@ -1,7 +1,7 @@
 import * as TYPE from '../store/types';
 import { asFormData, apiRequest } from './helpers';
 import { getManagementLocations } from './management';
-import { getCompanies } from './common';
+import { getCities, getCompanies } from './common';
 import * as toast from './toast';
 
 export const userLogin = ({ username, password }) => {
@@ -15,6 +15,7 @@ export const userLogin = ({ username, password }) => {
             dispatch({ type: TYPE.USER_LOGIN_SUCCESS, payload: { accessToken: res?.access, refreshToken: res?.refresh } });
             dispatch(getCurrentUser());
             dispatch(getCompanies({}));
+            dispatch(getCities())
         }).catch((_) => {
             dispatch({ type: TYPE.USER_LOGIN_FAIL });
             toast.warning("Login failed");
