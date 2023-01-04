@@ -15,7 +15,7 @@ import { FaPhone, FaMailBulk, FaLink } from "react-icons/fa";
 
 export default ({ isVisible, setVisible, locationId }) => {
   const dispatch = useDispatch();
-  const location = useSelector((state) => state.common.locationDetail);
+  const location = useSelector((state) => state.common?.locationDetail ?? {});
   const loading = useSelector((state) => state.common.loading);
 
   useEffect(() => {
@@ -37,18 +37,18 @@ export default ({ isVisible, setVisible, locationId }) => {
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
           <Typography variant="h5" component="div">
-            {location.name}
+            {location?.name}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            {location.city}
+            {location?.city}
           </Typography>
           <Typography variant="body2">
-            <FaMailBulk /> {location.email}
+            <FaMailBulk /> {location?.email}
             <br />
-            <FaPhone /> {location.phone_number}
+            <FaPhone /> {location?.phone_number}
           </Typography>
-          <a href={location.website_url} target={"_blank"}>
-            <FaLink /> {location.website_url}
+          <a href={location?.website_url} target={"_blank"}>
+            <FaLink /> {location?.website_url}
           </a>
         </CardContent>
       </Card>

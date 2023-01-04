@@ -15,7 +15,7 @@ import { handleCourtLocation } from "../../actions/helpers";
 
 export default ({ isVisible, setVisible, courtId }) => {
   const dispatch = useDispatch();
-  const court = useSelector((state) => state.common.courtDetail);
+  const court = useSelector((state) => state?.common?.courtDetail ?? {});
   const loading = useSelector((state) => state.common.loading);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default ({ isVisible, setVisible, courtId }) => {
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
           <Typography variant="h5" component="div">
-            {court.name}
+            {court?.name}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {handleCourtLocation(court)}
