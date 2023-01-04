@@ -64,7 +64,9 @@ export function apiRequest({ url, method, body, okStatus, token }) {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await fetch(`${API}${url}`, requestObject);
-            if (response.status === (okStatus ?? 200)) {
+            if (okStatus === 204 && response.status === okStatus) {
+                resolve(true);
+            } else if (response.status === (okStatus ?? 200)) {
                 resolve(response.json());
             } else {
                 reject(response.status);

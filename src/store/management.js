@@ -43,16 +43,19 @@ export default function (state = initialState, action) {
         case TYPE.MANAGEMENT_COURTS_UPDATE_START:
         case TYPE.MANAGEMENT_LOCATIONS_CREATE_START:
         case TYPE.MANAGEMENT_LOCATIONS_UPDATE_START:
+        case TYPE.MANAGEMENT_COURTS_DELETE_START:
             return { ...state, actionInProgress: true };
 
         case TYPE.MANAGEMENT_COURTS_CREATE_SUCCESS:
         case TYPE.MANAGEMENT_COURTS_UPDATE_SUCCESS:
         case TYPE.MANAGEMENT_LOCATIONS_CREATE_SUCCESS:
         case TYPE.MANAGEMENT_LOCATIONS_UPDATE_SUCCESS:
+        case TYPE.MANAGEMENT_COURTS_DELETE_SUCCESS:
         case TYPE.MANAGEMENT_COURTS_CREATE_FAIL:
         case TYPE.MANAGEMENT_COURTS_UPDATE_FAIL:
         case TYPE.MANAGEMENT_LOCATIONS_CREATE_FAIL:
         case TYPE.MANAGEMENT_LOCATIONS_UPDATE_FAIL:
+        case TYPE.MANAGEMENT_COURTS_DELETE_FAIL:
             return { ...state, actionInProgress: false };
 
         default:

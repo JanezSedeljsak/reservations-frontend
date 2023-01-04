@@ -37,10 +37,10 @@ export default function ({
     const courtData = {
       name: nameRef.current.value,
       court_types: [typeRef.current.value],
-      is_outside: isOutSideRef.current.value,
+      is_outside: isOutSideRef.current.checked,
       locationId,
     };
-
+    
     return courtData;
   }
 
@@ -76,7 +76,7 @@ export default function ({
         <Input
           reference={nameRef}
           id={"name"}
-          value={!isCreate ? court.name : ""}
+          value={!isCreate ? court?.name : ""}
         />
         <Select
           reference={typeRef}
@@ -88,7 +88,7 @@ export default function ({
         <CheckBox
           id={"is_outside"}
           label="Is outside"
-          value={false}
+          value={!isCreate ? court?.is_outside : false}
           reference={isOutSideRef}
         />
         <SubmitButton

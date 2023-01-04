@@ -111,6 +111,26 @@ export const updateManagementCourt = ({ id, name, court_types, is_outside, locat
     }
 }
 
+export const deleteManagmentCourt = (id, locationId, callback) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_COURTS_DELETE_START });
+        apiRequest({
+            url: `/management/locations/${locationId}/courts/${id}/`,
+            method: 'DELETE',
+            token: accessToken,
+            okStatus: 204,
+        }).then((_) => {
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_DELETE_SUCCESS });
+            toast.success('Deleted court!');
+            callback();
+        }).catch((_) => {
+            toast.error('Failed to delete court!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_DELETE_FAIL });
+        });
+    }
+}
+
 export const getLocationCourts = (filters) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;

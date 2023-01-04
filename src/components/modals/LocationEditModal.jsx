@@ -92,33 +92,33 @@ export default function ({ isVisible, setVisible, locationId, search }) {
         <Input
           reference={nameRef}
           id={"name"}
-          value={!isCreate ? location.name : ""}
+          value={!isCreate ? location?.name : ""}
         />
         <Select
           reference={cityRef}
           id={"city"}
           label={"city"}
-          value={!isCreate ? location.city.id : cities?.[0]?.id ?? -1}
+          value={!isCreate ? location?.city?.id : cities?.[0]?.id ?? -1}
           options={cities}
         />
         <Input
           reference={emailRef}
           type={"email"}
           id={"email"}
-          value={!isCreate ? location.email : ""}
+          value={!isCreate ? location?.email : ""}
         />
 
         <Input
           reference={urlRef}
           id={"website_url"}
           label={"website url"}
-          value={!isCreate ? location.website_url : ""}
+          value={!isCreate ? location?.website_url : ""}
         />
         <Input
           reference={phoneNumberRef}
           id={"phone_number"}
           label={"phone number"}
-          value={!isCreate ? location.phone_number : ""}
+          value={!isCreate ? location?.phone_number : ""}
         />
         <LocationPicker
           containerElement={<div />}

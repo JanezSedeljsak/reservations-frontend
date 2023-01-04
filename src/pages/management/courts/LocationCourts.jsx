@@ -5,6 +5,7 @@ import {
   FaPlusCircle,
   FaCheckSquare,
   FaExpandArrowsAlt,
+  FaTrashAlt,
 } from "react-icons/fa";
 import { IoReturnUpBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,7 +15,10 @@ import {
   getCourtTypes,
   getLocationDetail,
 } from "../../../actions/common";
-import { getLocationCourts } from "../../../actions/management";
+import {
+  getLocationCourts,
+  deleteManagmentCourt,
+} from "../../../actions/management";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyledTableCell,
@@ -67,6 +71,20 @@ export default function ({ isMyCourts, companyId }) {
   function openCourtDetailModal(court_id) {
     setCourtId(court_id);
     setDetailModalVisible(true);
+  }
+
+  function deleteCourt(court_id) {
+    if (confirm("Are you sure you want to delete this court?")) {
+      dispatch(
+        deleteManagmentCourt(court_id, locationId, () => {
+          if (isMyCourts) {
+            dispatch(getLocationCourts({ locationId, search }));
+          } else {
+            dispatch(getCourts({ location: locationId, search }));
+          }
+        })
+      );
+    }
   }
 
   function handleTitle() {
@@ -125,47 +143,54 @@ export default function ({ isMyCourts, companyId }) {
               <StyledTableCell sx={{ width: 100 }} align="center">
                 Is outside
               </StyledTableCell>
-              <StyledTableCell sx={{ width: 250 }} align="right">
+              <StyledTableCell sx={{ width: 350 }} align="right">
                 Actions
               </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(courts) && courts.map((court) => (
-              <StyledTableRow key={court.id}>
-                <StyledTableCell component="th" scope="court">
-                  {court.name}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {concatCourtTypes(court)}
-                </StyledTableCell>
-                <StyledTableCell sx={{ width: 100 }} align="center">
-                  {court?.is_outside ? <FaCheckSquare size={16} /> : null}
-                </StyledTableCell>
-                <StyledTableCell sx={{ width: 250 }} align="right">
-                  {isMyCourts && (
+            {Array.isArray(courts) &&
+              courts.map((court) => (
+                <StyledTableRow key={court.id}>
+                  <StyledTableCell component="th" scope="court">
+                    {court.name}
+                  </StyledTableCell>
+                  <StyledTableCell>{concatCourtTypes(court)}</StyledTableCell>
+                  <StyledTableCell sx={{ width: 100 }} align="center">
+                    {court?.is_outside ? <FaCheckSquare size={16} /> : null}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ width: 250 }} align="right">
+                    {isMyCourts && (
+                      <IconButton
+                        color="primary"
+                        tooltip={"Edit court"}
+                        icon={<GoPencil size={20} />}
+                        onClick={() => openCourtEditModal(court.id)}
+                      />
+                    )}
                     <IconButton
-                      color="primary"
-                      tooltip={"Edit court"}
-                      icon={<GoPencil size={20} />}
-                      onClick={() => openCourtEditModal(court.id)}
+                      color="info"
+                      tooltip={"Court detail"}
+                      icon={<FaExpandArrowsAlt size={20} />}
+                      onClick={() => openCourtDetailModal(court.id)}
                     />
-                  )}
-                  <IconButton
-                    color="info"
-                    tooltip={"Court detail"}
-                    icon={<FaExpandArrowsAlt size={20} />}
-                    onClick={() => openCourtDetailModal(court.id)}
-                  />
-                  <IconButton
-                    color="default"
-                    tooltip={"Show court timeline"}
-                    icon={<FaCalendar size={20} />}
-                    onClick={() => openTimeline(court.id)}
-                  />
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+                    <IconButton
+                      color="default"
+                      tooltip={"Show court timeline"}
+                      icon={<FaCalendar size={20} />}
+                      onClick={() => openTimeline(court.id)}
+                    />
+                    {isMyCourts && (
+                      <IconButton
+                        color="error"
+                        tooltip={"Delete court"}
+                        icon={<FaTrashAlt size={20} />}
+                        onClick={() => deleteCourt(court.id)}
+                      />
+                    )}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
