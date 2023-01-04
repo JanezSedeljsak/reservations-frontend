@@ -40,7 +40,7 @@ const randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
 const randomRGB = () => `rgb(${randomNum()}, ${randomNum()}, ${randomNum()})`;
 
 function LocationsChart({ locations }) {
-  const labels = locations.map((x) => x.location);
+  const labels = locations.map((x) => x.name);
   const data = locations.map((x) => x.count);
 
   return (
@@ -63,7 +63,7 @@ function LocationsChart({ locations }) {
 }
 
 function CourtsChart({ courts }) {
-  const labels = courts.map((x) => x.court);
+  const labels = courts.map((x) => x.name);
   const data = courts.map((x) => x.count);
 
   return (
@@ -102,25 +102,36 @@ export default () => {
     const courtsCounter = {};
 
     for (const log of analytics) {
-      if (log.log_type === "court_shown") {
-        courtsCounter[log.court] = 1 + (courtsCounter?.[log.court] ?? 0);
-      } else if (log.log_type === "location_shown") {
-        locationCounter[log.location] =
-          1 + (courtsCounter?.[log.location] ?? 0);
+      if (log.log_type === "court_detail") {
+        const key = log?.court?.id;
+        if (!key) continue;
+
+        courtsCounter[key] = {
+          count: 1 + (courtsCounter?.[key]?.count ?? 0),
+          name: log?.court?.name,
+        };
+      } else if (log.log_type === "location_detail") {
+        const key = log?.locaiton?.id;
+        if (!key) continue;
+
+        locationCounter[key] = {
+          count: 1 + (courtsCounter?.[key] ?? 0),
+          name: log?.location?.name,
+        };
       }
     }
 
     setLocations(
       Object.keys(locationCounter).map((location) => ({
-        location,
-        count: locationCounter[location],
+        name: locationCounter[location].name,
+        count: locationCounter[location].count,
       }))
     );
 
     setCourts(
       Object.keys(courtsCounter).map((court) => ({
-        court,
-        count: courtsCounter[court],
+        name: courtsCounter[court].name,
+        count: courtsCounter[court].count,
       }))
     );
   }, [analytics]);
@@ -137,9 +148,11 @@ export default () => {
     return (
       <>
         <LocationsChart
-          locations={locations.sort((a, b) => b.count - a.count)}
+          locations={locations.sort((a, b) => b.count - a.count).slice(0, 10)}
         />
-        <CourtsChart courts={courts.sort((a, b) => b.count - a.count)} />
+        <CourtsChart
+          courts={courts.sort((a, b) => b.count - a.count).slice(0, 10)}
+        />
       </>
     );
   }

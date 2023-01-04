@@ -108,7 +108,7 @@ export const getManagementAnalytics = ()  => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_GET_ANALYTICS_START });
         apiRequest({
-            url: `/management/analytics/`,
+            url: `/management/analytics/?type=court_detail`,
             method: 'GET',
             token: accessToken
         }).then((res) => {
