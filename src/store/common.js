@@ -5,6 +5,8 @@ const initialState = {
     courtTypes: [],
     locationCourts: [],
     locations: [],
+    locationDetail: {},
+    courtDetail: {},
     loading: false
 };
 
@@ -37,6 +39,20 @@ export default function (state = initialState, action) {
             return { ...state, loading: false, locationCourts: action.payload.locationCourts };
         case TYPE.COMMON_GET_COURTS_FAIL:
             return { ...state, loading: false, locationCourts: [] };
+
+        case TYPE.COMMON_GET_COURT_DETAIL_START:
+            return { ...state, loading: true, courtDetail: {} };
+        case TYPE.COMMON_GET_COURT_DETAIL_SUCCESS:
+            return { ...state, loading: false, courtDetail: action.payload.courtDetail };
+        case TYPE.COMMON_GET_COURT_DETAIL_FAIL:
+            return { ...state, loading: false, courtDetail: {} };
+
+        case TYPE.COMMON_GET_LOCATION_DETAIL_START:
+            return { ...state, loading: true, locationDetail: {} };
+        case TYPE.COMMON_GET_LOCATION_DETAIL_SUCCESS:
+            return { ...state, loading: false, locationDetail: action.payload.locationDetail };
+        case TYPE.COMMON_GET_LOCATION_DETAIL_FAIL:
+            return { ...state, loading: false, locationDetail: {} };
 
         default:
             return state;

@@ -27,10 +27,10 @@ export default function ({ isVisible, setVisible, locationId, mode }) {
   const [position, setPosition] = useState(defaultPosition);
 
   useEffect(() => {
-    if (!isCreate) {
+    if (!isCreate && isVisible) {
       console.log("load existing location");
     }
-  }, [locationId]);
+  }, [locationId, isVisible]);
 
   function handleChangePosition(event) {
     setPosition(event.position);

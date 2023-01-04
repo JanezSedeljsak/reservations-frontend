@@ -43,9 +43,7 @@ export default function () {
     <nav className="navbar navbar-expand-lg sticky-top navbar-light bg-white">
       <div className="container-fluid">
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <a className="navbar-brand mt-2 mt-lg-0" href="#">
-            <img src={Logo} height={35} alt="MDB Logo" loading="lazy" />
-          </a>
+          <img src={Logo} height={35} alt="MDB Logo" loading="lazy" />
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <a className="nav-link" onClick={() => navigate(`/companies`)}>

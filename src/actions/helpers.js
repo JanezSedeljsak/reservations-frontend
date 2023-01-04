@@ -11,6 +11,20 @@ export function asFormData(jsonData) {
     return form_data;
 }
 
+export function handleCourtLocation(court) {
+    if (!court?.location?.name) {
+        return "";
+    }
+
+    let str = court?.location?.city || "";
+    if (str.length) {
+        str += " - ";
+    }
+
+    str += court.location.name;
+    return str;
+}
+
 export function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -31,9 +45,11 @@ export function apiRequest({ url, method, body, okStatus, token }) {
     };
 
     if (token) {
-        requestObject = { ...requestObject, headers: { 
-            "Authorization": "Bearer " + token,
-        }}
+        requestObject = {
+            ...requestObject, headers: {
+                "Authorization": "Bearer " + token,
+            }
+        }
     }
 
     return new Promise(async (resolve, reject) => {

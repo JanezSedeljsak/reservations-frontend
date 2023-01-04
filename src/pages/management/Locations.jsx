@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoLocation, GoPencil } from "react-icons/go";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle, FaExpandArrowsAlt } from "react-icons/fa";
 import { TbSoccerField } from "react-icons/tb";
 import LocationEditModal from "../../components/modals/LocationEditModal";
 import { useDebounce } from "../../actions/helpers";
@@ -20,6 +20,7 @@ import { StyledTableCell, StyledTableRow } from "../../components/StyledTable";
 import IconButton from "../../components/IconButton";
 import { getLocations } from "../../actions/common";
 import { getManagementLocations } from "../../actions/management";
+import LocationDetailModal from "../../components/modals/LocationDetailModal";
 
 export default function ({ isMyLocations, companyId }) {
   const dispatch = useDispatch();
@@ -30,10 +31,16 @@ export default function ({ isMyLocations, companyId }) {
   const locations = useSelector((state) => state[storeKey]?.locations ?? []);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [locationId, setLocationId] = useState(null);
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 200);
+
+  function openLocationDetailModal(location_id) {
+    setLocationId(location_id);
+    setDetailModalVisible(true);
+  }
 
   function openLocationEditModal(location_id) {
     setLocationId(location_id);
@@ -99,6 +106,12 @@ export default function ({ isMyLocations, companyId }) {
                     />
                   )}
                   <IconButton
+                    color="info"
+                    tooltip={"Location detail"}
+                    icon={<FaExpandArrowsAlt size={20} />}
+                    onClick={() => openLocationDetailModal(location.id)}
+                  />
+                  <IconButton
                     color="default"
                     icon={<TbSoccerField />}
                     tooltip={"Show courts"}
@@ -113,13 +126,25 @@ export default function ({ isMyLocations, companyId }) {
     );
   };
 
+  function renderModals() {
+    return (
+      <>
+        <LocationEditModal
+          isVisible={modalVisible}
+          setVisible={setModalVisible}
+          locationId={locationId}
+        />
+        <LocationDetailModal
+          isVisible={detailModalVisible}
+          setVisible={setDetailModalVisible}
+          locationId={locationId}
+        />
+      </>
+    );
+  }
+
   return (
     <>
-      <LocationEditModal
-        isVisible={modalVisible}
-        setVisible={setModalVisible}
-        locationId={locationId}
-      />
       <div className="center" style={{ marginTop: 20 }}>
         <div className="main-container">
           <div className="page-header header-row">
@@ -153,6 +178,7 @@ export default function ({ isMyLocations, companyId }) {
           {RenderDataTable()}
         </div>
       </div>
+      {renderModals()}
     </>
   );
 }

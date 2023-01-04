@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { FaCalendar, FaCheckSquare } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { FaCalendar, FaCheckSquare, FaExpandArrowsAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getCourts, getCourtTypes } from "../actions/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,8 @@ import {
   Box,
 } from "@mui/material";
 import IconButton from "../components/IconButton";
+import CourtDetailModal from '../components/modals/CourtDetailModal';
+import { handleCourtLocation } from "../actions/helpers";
 
 export default function () {
   const navigate = useNavigate();
@@ -26,7 +28,9 @@ export default function () {
   const isLoading = useSelector((state) => state.common.loading);
   const courts = useSelector((state) => state.common.locationCourts ?? []);
   const courtTypes = useSelector((state) => state.common.courtTypes);
-  console.log(courts);
+
+  const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [courtId, setCourtId] = useState(null);
 
   const courtTypeRef = useRef(null);
   const searchRef = useRef(null);
@@ -46,13 +50,18 @@ export default function () {
     alert("open timeline");
   }
 
-  function filter() {
+  function handleFilterCourts() {
     dispatch(
       getCourts({
         search: searchRef?.current?.value,
         courtType: courtTypeRef?.current?.value,
       })
     );
+  }
+
+  function openCourtDetailModal(court_id) {
+    setCourtId(court_id);
+    setDetailModalVisible(true);
   }
 
   const RenderDataTable = () => {
@@ -83,7 +92,7 @@ export default function () {
             {courts.map((court) => (
               <StyledTableRow key={court.id}>
                 <StyledTableCell component="th">
-                  {court?.location?.name ?? 'No location'}
+                  {handleCourtLocation(court)}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="court">
                   {court.name}
@@ -92,6 +101,12 @@ export default function () {
                   {court?.is_outside ? <FaCheckSquare size={16} /> : null}
                 </StyledTableCell>
                 <StyledTableCell sx={{ width: 250 }} align="right">
+                  <IconButton
+                    color="info"
+                    tooltip={"Court detail"}
+                    icon={<FaExpandArrowsAlt size={20} />}
+                    onClick={() => openCourtDetailModal(court.id)}
+                  />
                   <IconButton
                     color="default"
                     tooltip={"Show court timeline"}
@@ -115,19 +130,28 @@ export default function () {
             <Card>
               <CardContent>
                 <h4>Courts</h4>
-                <Input reference={searchRef} id={"name"} />
+                <Input
+                  reference={searchRef}
+                  id={"name_city"}
+                  label={"Name or city"}
+                />
                 <Select
                   id={"type"}
                   reference={courtTypeRef}
-                  options={[{id: null, name: '/'}, ...courtTypes]}
+                  options={[{ id: '', name: "/" }, ...courtTypes]}
                 />
-                <SubmitButton label={"Filter"} onPress={filter} />
+                <SubmitButton label={"filter"} onPress={handleFilterCourts} />
               </CardContent>
             </Card>
           </div>
           {RenderDataTable()}
         </div>
       </div>
+      <CourtDetailModal
+        isVisible={detailModalVisible}
+        setVisible={setDetailModalVisible}
+        courtId={courtId}
+      />
     </>
   );
 }

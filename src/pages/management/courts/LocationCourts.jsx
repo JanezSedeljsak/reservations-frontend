@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { GoPencil } from "react-icons/go";
-import { FaCalendar, FaPlusCircle, FaCheckSquare } from "react-icons/fa";
+import {
+  FaCalendar,
+  FaPlusCircle,
+  FaCheckSquare,
+  FaExpandArrowsAlt,
+} from "react-icons/fa";
 import { IoReturnUpBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import CourtEditModal from "../../../components/modals/CourtEditModal";
-import { getCourts, getCourtTypes } from "../../../actions/common";
+import {
+  getCourts,
+  getCourtTypes,
+  getLocationDetail,
+} from "../../../actions/common";
 import { getLocationCourts } from "../../../actions/management";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,10 +28,11 @@ import {
   TableBody,
   Table,
   Box,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import IconButton from "../../../components/IconButton";
 import { useDebounce } from "../../../actions/helpers";
+import CourtDetailModal from "../../../components/modals/CourtDetailModal";
 
 export default function ({ isMyCourts, companyId }) {
   const { id: locationId } = useParams(); // location id
@@ -32,6 +42,7 @@ export default function ({ isMyCourts, companyId }) {
   const state_key = isMyCourts ? "management" : "common";
   const isLoading = useSelector((state) => state[state_key].loading);
   const courts = useSelector((state) => state[state_key]?.locationCourts ?? []);
+  const location = useSelector((state) => state?.common?.locationDetail ?? {});
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 200);
@@ -45,6 +56,7 @@ export default function ({ isMyCourts, companyId }) {
   }, [debouncedSearch]);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [courtId, setCourtId] = useState(null);
 
   function openCourtEditModal(court_id) {
@@ -52,11 +64,25 @@ export default function ({ isMyCourts, companyId }) {
     setModalVisible(true);
   }
 
+  function openCourtDetailModal(court_id) {
+    setCourtId(court_id);
+    setDetailModalVisible(true);
+  }
+
+  function handleTitle() {
+    if (!location?.name || !location.city) {
+      return "Courts";
+    }
+
+    return `Courts - ${location.name} (${location.city})`;
+  }
+
   // on screen load -> get court types
   useEffect(() => {
     dispatch(getCourtTypes());
+    dispatch(getLocationDetail(locationId));
     if (isMyCourts) {
-      dispatch(getLocationCourts({locationId}));
+      dispatch(getLocationCourts({ locationId }));
     } else {
       dispatch(getCourts({ location: locationId }));
     }
@@ -104,7 +130,7 @@ export default function ({ isMyCourts, companyId }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {courts.map((court) => (
+            {Array.isArray(courts) && courts.map((court) => (
               <StyledTableRow key={court.id}>
                 <StyledTableCell component="th" scope="court">
                   {court.name}
@@ -122,6 +148,12 @@ export default function ({ isMyCourts, companyId }) {
                     />
                   )}
                   <IconButton
+                    color="info"
+                    tooltip={"Court detail"}
+                    icon={<FaExpandArrowsAlt size={20} />}
+                    onClick={() => openCourtDetailModal(court.id)}
+                  />
+                  <IconButton
                     color="default"
                     tooltip={"Show court timeline"}
                     icon={<FaCalendar size={20} />}
@@ -136,6 +168,23 @@ export default function ({ isMyCourts, companyId }) {
     );
   };
 
+  function RenderModals() {
+    return (
+      <>
+        <CourtEditModal
+          isVisible={modalVisible}
+          setVisible={setModalVisible}
+          courtId={courtId}
+        />
+        <CourtDetailModal
+          isVisible={detailModalVisible}
+          setVisible={setDetailModalVisible}
+          courtId={courtId}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <div className="center" style={{ marginTop: 20 }}>
@@ -148,7 +197,7 @@ export default function ({ isMyCourts, companyId }) {
                 icon={<IoReturnUpBack />}
                 onClick={goBackToLocations}
               />
-              <h4 style={{ marginBottom: 0 }}>Courts</h4>
+              <h4 style={{ marginBottom: 0 }}>{handleTitle()}</h4>
               {isMyCourts && (
                 <IconButton
                   color="primary"
@@ -165,7 +214,7 @@ export default function ({ isMyCourts, companyId }) {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="search-addon"
-                onChange={event => setSearch(event.target.value)}
+                onChange={(event) => setSearch(event.target.value)}
               />
               <span className="input-group-text border-0" id="search-addon">
                 <i className="fas fa-search"></i>
@@ -175,11 +224,7 @@ export default function ({ isMyCourts, companyId }) {
           {RenderDataTable()}
         </div>
       </div>
-      <CourtEditModal
-        isVisible={modalVisible}
-        setVisible={setModalVisible}
-        courtId={courtId}
-      />
+      {RenderModals()}
     </>
   );
 }

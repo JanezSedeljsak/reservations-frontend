@@ -98,8 +98,9 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    const locationCounter = {},
-      courtsCounter = {};
+    const locationCounter = {};
+    const courtsCounter = {};
+
     for (const log of analytics) {
       if (log.log_type === "court_shown") {
         courtsCounter[log.court] = 1 + (courtsCounter?.[log.court] ?? 0);
@@ -122,7 +123,6 @@ export default () => {
         count: courtsCounter[court],
       }))
     );
-
   }, [analytics]);
 
   function ChartsOrLoading() {

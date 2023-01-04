@@ -1,0 +1,15 @@
+.detail-modal {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  min-height: 300px;
+  background-color: #eee;
+  border-radius: 10px;
+  border: 0px;
+}
+
+.detail-modal > .MuiPaper-root {
+    min-height: 300px;
+}
