@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import IconButton from "../components/IconButton";
 import CourtDetailModal from '../components/modals/CourtDetailModal';
-import { handleCourtLocation } from "../actions/helpers";
+import { handleCourtLocation, concatCourtTypes } from "../actions/helpers";
 
 export default function () {
   const navigate = useNavigate();
@@ -80,6 +80,7 @@ export default function () {
             <TableRow>
               <StyledTableCell>Location</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Type</StyledTableCell>
               <StyledTableCell sx={{ width: 100 }} align="center">
                 Is outside
               </StyledTableCell>
@@ -96,6 +97,9 @@ export default function () {
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="court">
                   {court?.name}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {concatCourtTypes(court)}
                 </StyledTableCell>
                 <StyledTableCell sx={{ width: 100 }} align="center">
                   {court?.is_outside ? <FaCheckSquare size={16} /> : null}

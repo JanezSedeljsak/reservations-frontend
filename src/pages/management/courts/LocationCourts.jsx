@@ -31,7 +31,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import IconButton from "../../../components/IconButton";
-import { useDebounce } from "../../../actions/helpers";
+import { useDebounce, concatCourtTypes } from "../../../actions/helpers";
 import CourtDetailModal from "../../../components/modals/CourtDetailModal";
 
 export default function ({ isMyCourts, companyId }) {
@@ -121,6 +121,7 @@ export default function ({ isMyCourts, companyId }) {
           <TableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Type</StyledTableCell>
               <StyledTableCell sx={{ width: 100 }} align="center">
                 Is outside
               </StyledTableCell>
@@ -134,6 +135,9 @@ export default function ({ isMyCourts, companyId }) {
               <StyledTableRow key={court.id}>
                 <StyledTableCell component="th" scope="court">
                   {court.name}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {concatCourtTypes(court)}
                 </StyledTableCell>
                 <StyledTableCell sx={{ width: 100 }} align="center">
                   {court?.is_outside ? <FaCheckSquare size={16} /> : null}

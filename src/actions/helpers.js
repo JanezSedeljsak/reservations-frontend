@@ -25,6 +25,15 @@ export function handleCourtLocation(court) {
     return str;
 }
 
+export function concatCourtTypes(court) {
+    if (!court?.court_types) { 
+      return '/';
+    }
+
+    const arr = court.court_types.map(x => x.name);
+    return arr.join(", ");
+  }
+
 export function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
