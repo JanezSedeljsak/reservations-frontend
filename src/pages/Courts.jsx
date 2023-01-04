@@ -28,6 +28,7 @@ export default function () {
   const isLoading = useSelector((state) => state.common.loading);
   const courts = useSelector((state) => state.common.locationCourts ?? []);
   const courtTypes = useSelector((state) => state.common.courtTypes);
+  console.log(courts);
 
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [courtId, setCourtId] = useState(null);
@@ -89,13 +90,13 @@ export default function () {
             </TableRow>
           </TableHead>
           <TableBody>
-            {courts.map((court) => (
+            {Array.isArray(courts) && courts.map((court) => (
               <StyledTableRow key={court.id}>
                 <StyledTableCell component="th">
                   Test
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="court">
-                  {court.name}
+                  {court?.name}
                 </StyledTableCell>
                 <StyledTableCell sx={{ width: 100 }} align="center">
                   {court?.is_outside ? <FaCheckSquare size={16} /> : null}
