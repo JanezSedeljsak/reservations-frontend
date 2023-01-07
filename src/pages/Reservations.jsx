@@ -20,6 +20,7 @@ export default function () {
 
   const isLoading = useSelector((state) => state.client.loading);
   const reservations = useSelector((state) => state.client.reservations ?? []);
+  console.log(reservations);
 
   useEffect(() => {
     dispatch(getReservations());
@@ -48,7 +49,7 @@ export default function () {
           <TableBody>
             {reservations.map((reservation) => (
               <StyledTableRow key={reservation.id}>
-                <StyledTableCell component="th" scope="court">{reservation.schedule.court}</StyledTableCell>
+                <StyledTableCell component="th" scope="court">{reservation.court.name}</StyledTableCell>
                 <StyledTableCell>
                   {reservation.date}
                 </StyledTableCell>

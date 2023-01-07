@@ -22,6 +22,7 @@ import CompanyCourts from "./pages/CompanyCourts";
 import CompanyLocations from "./pages/CompanyLocations";
 import Reservations from "./pages/Reservations";
 import CompanyTimeline from "./pages/CompanyTimeline";
+import ScheduleReservations from './pages/ScheduleReservations';
 
 const Navigation = ({ isAuth, isPofile }) => {
   return !(isAuth && isPofile) ? <PublicNavbar /> : <Navbar />;
@@ -92,6 +93,14 @@ function App() {
           element={
             <PrivateRoute isAllowed={isAuth}>
               <CompanyTimeline />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`/company/:companyId/location/:locationId/court/timeline/:courtId/reservations`}
+          element={
+            <PrivateRoute isAllowed={isAuth}>
+              <ScheduleReservations />
             </PrivateRoute>
           }
         />

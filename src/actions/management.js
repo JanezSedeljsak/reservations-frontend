@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import * as toast from './toast';
 import * as TYPE from '../store/types';
 import { getCourtDetail, getLocationDetail } from './common';
 import { asFormData, apiRequest } from './helpers';
@@ -175,13 +175,13 @@ export const getManagementSchedule = ({ location, court }) => {
     }
 };
 
-export const createManagementSchedule = ({ locationId, courtId, day, start_time, end_time }) => {
+export const createManagementSchedule = ({ locationId, courtId, day, start_time, end_time, title }) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_CREATE_START });
         apiRequest({
             url: `/management/locations/${locationId}/courts/${courtId}/schedules/`,
-            body: asFormData({ day, start_time, end_time, price: 0.00, is_active: true }),
+            body: asFormData({ day, start_time, end_time, title, price: 0.00, is_active: true }),
             method: 'POST',
             token: accessToken,
             okStatus: 201
@@ -199,13 +199,13 @@ export const createManagementSchedule = ({ locationId, courtId, day, start_time,
     }
 }
 
-export const updateManagementSchedule = ({ id, locationId, courtId, day, start_time, end_time }) => {
+export const updateManagementSchedule = ({ id, locationId, courtId, day, start_time, end_time, title }) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_UPDATE_START });
         apiRequest({
             url: `/management/locations/${locationId}/courts/${courtId}/schedules/${id}/`,
-            body: asFormData({ day, start_time, end_time, price: 0.00, is_active: true }),
+            body: asFormData({ day, start_time, end_time, title, price: 0.00, is_active: true }),
             method: 'PATCH',
             token: accessToken
         }).then((_) => {
@@ -249,7 +249,7 @@ export const getManagementAnalytics = () => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.MANAGEMENT_GET_ANALYTICS_START });
         apiRequest({
-            url: `/management/analytics/?type=court_detail,location_detail`,
+            url: `/management/analytics/?is_company=${false}&type=court_detail,location_detail`,
             method: 'GET',
             token: accessToken
         }).then((res) => {

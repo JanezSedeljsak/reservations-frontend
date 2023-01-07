@@ -34,6 +34,7 @@ export default function ({
   );
   const isCreate = scheduleId === null;
   const dispatch = useDispatch();
+  console.log(schedule);
 
   const titleRef = useRef(null);
   const dayRef = useRef(null);
@@ -63,6 +64,7 @@ export default function ({
     return {
       locationId,
       courtId,
+      title: titleRef.current.value,
       id: scheduleId,
       day: dayRef.current.value,
       start_time: start.$d.toTimeString().slice(0, 8),

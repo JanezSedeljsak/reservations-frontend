@@ -48,7 +48,7 @@ export default function () {
 
   function openTimeline(court) {
     navigate(
-      `/company/${court.owner.id}/location/${court.location.id}/court/timeline/${court.id}`
+      `/company/${court.owner.id}/location/${court.location.id}/court/timeline/${court.id}/reservations`
     );
   }
 

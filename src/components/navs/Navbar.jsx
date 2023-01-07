@@ -7,6 +7,9 @@ import Logo from "../../assets/LogoHorizontal.svg";
 
 export default function () {
   const isCompany = useSelector(isUserCompany);
+  const username = useSelector(
+    (state) => state?.user?.profile?.username ?? "Profile"
+  );
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -56,7 +59,6 @@ export default function () {
 
             <ClientNavItem name={"My reservations"} route={`/reservations`} />
             <ClientNavItem name={"Court Search"} route={`/courts`} />
-
           </ul>
         </div>
 
@@ -66,7 +68,9 @@ export default function () {
             style={{ paddingRight: 20 }}
             onClick={() => navigate(`/profile`)}
           >
-            Profile
+            <span style={{ fontWeight: "bold", color: "#3b71ca" }}>
+              {username}
+            </span>
           </a>
           <a className="nav-link" onClick={handleLogout}>
             Logout

@@ -4,10 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Scheduler } from "@aldabil/react-scheduler";
 import IconButton from "../../../components/IconButton";
 import { IoReturnUpBack } from "react-icons/io5";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle, FaBookOpen } from "react-icons/fa";
 import { Card } from "@mui/material";
 import { getManagementSchedule } from "../../../actions/management";
-import { formatFromTo, handleCourtTimelineTitle } from "../../../actions/helpers";
+import {
+  formatFromTo,
+  handleCourtTimelineTitle,
+} from "../../../actions/helpers";
 import ScheduleEditModal from "../../../components/modals/ScheduleEditModal";
 import { getCourtDetail } from "../../../actions/common";
 
@@ -18,7 +21,8 @@ export default function ({ isMyTimeline, companyId }) {
 
   const loading = useSelector((state) => state.management.loading);
   const timeline = useSelector((state) => state.management.timeline);
-  const court = useSelector(state => state?.common?.courtDetail ?? {});
+  const court = useSelector((state) => state?.common?.courtDetail ?? {});
+  console.log(timeline);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scheduleId, setScheduleId] = useState();
@@ -29,6 +33,12 @@ export default function ({ isMyTimeline, companyId }) {
     } else {
       navigate(`/company/${companyId}/location/${locationId}/courts`);
     }
+  }
+
+  function openTimelineReservations(court) {
+    navigate(
+      `/company/${companyId}/location/${locationId}/court/timeline/${courtId}/reservations`
+    );
   }
 
   function openAddScheduleModal() {
@@ -65,7 +75,9 @@ export default function ({ isMyTimeline, companyId }) {
                 icon={<IoReturnUpBack />}
                 onClick={goBackToCourts}
               />
-              <h4 style={{ marginBottom: 0 }}>{handleCourtTimelineTitle(court)}</h4>
+              <h4 style={{ marginBottom: 0 }}>
+                {handleCourtTimelineTitle(court)}
+              </h4>
               {isMyTimeline && (
                 <IconButton
                   color="primary"
@@ -74,6 +86,12 @@ export default function ({ isMyTimeline, companyId }) {
                   onClick={openAddScheduleModal}
                 />
               )}
+              <IconButton
+                  color="warning"
+                  tooltip={"Show reservations"}
+                  icon={<FaBookOpen />}
+                  onClick={openTimelineReservations}
+                />
             </div>
           </div>
           <div className="calendar-wrapper">
