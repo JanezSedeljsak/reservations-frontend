@@ -67,12 +67,14 @@ export default function () {
     if (isReserved && picked?.reservation_taken?.user?.id === idUser) {
       const msg = "This is your event. Do you want to cancel your reservation?";
       if (confirm(msg)) {
-        dispatch(cancelReservation(picked?.reservation_taken?.id, () => {
-          const dateFilter = dateStr(scheduleDate);
-          fetchScheduleData({
-            date: dateFilter,
-          });
-        }));
+        dispatch(
+          cancelReservation(picked?.reservation_taken?.id, () => {
+            const dateFilter = dateStr(scheduleDate);
+            fetchScheduleData({
+              date: dateFilter,
+            });
+          })
+        );
       }
       return;
     }
