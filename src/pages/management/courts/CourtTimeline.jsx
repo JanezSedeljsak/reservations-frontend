@@ -7,8 +7,9 @@ import { IoReturnUpBack } from "react-icons/io5";
 import { FaPlusCircle } from "react-icons/fa";
 import { Card } from "@mui/material";
 import { getManagementSchedule } from "../../../actions/management";
-import { formatFromTo } from "../../../actions/helpers";
+import { formatFromTo, handleCourtTimelineTitle } from "../../../actions/helpers";
 import ScheduleEditModal from "../../../components/modals/ScheduleEditModal";
+import { getCourtDetail } from "../../../actions/common";
 
 export default function ({ isMyTimeline, companyId }) {
   const { id: courtId, locationId } = useParams();
@@ -17,6 +18,7 @@ export default function ({ isMyTimeline, companyId }) {
 
   const loading = useSelector((state) => state.management.loading);
   const timeline = useSelector((state) => state.management.timeline);
+  const court = useSelector(state => state?.common?.courtDetail ?? {});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scheduleId, setScheduleId] = useState();
@@ -46,7 +48,10 @@ export default function ({ isMyTimeline, companyId }) {
     dispatch(getManagementSchedule({ court: courtId, location: locationId }));
   }
 
-  useEffect(fetchScheduleData, []);
+  useEffect(() => {
+    fetchScheduleData();
+    dispatch(getCourtDetail(courtId));
+  }, []);
 
   return (
     <>
@@ -60,7 +65,7 @@ export default function ({ isMyTimeline, companyId }) {
                 icon={<IoReturnUpBack />}
                 onClick={goBackToCourts}
               />
-              <h4 style={{ marginBottom: 0 }}>Timeline</h4>
+              <h4 style={{ marginBottom: 0 }}>{handleCourtTimelineTitle(court)}</h4>
               {isMyTimeline && (
                 <IconButton
                   color="primary"

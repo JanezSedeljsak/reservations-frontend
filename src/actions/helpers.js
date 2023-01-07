@@ -52,9 +52,17 @@ export function formatFromTo(start, end) {
     return `${startString} - ${endString}`;
 }
 
-export const toDayjs = (timeString) => {
+export function toDayjs(timeString) {
     const [hours, minutes, seconds] = timeString.split(':')
     return dayjs().hour(hours).minute(minutes).second(seconds)
+}
+
+export function handleCourtTimelineTitle(court) {
+    if (!Object.keys(court).length) {
+        return "Timeline";
+    }
+
+    return `Timeline: ${court?.location?.name ?? 'No location'} - ${court?.name ?? 'No court'}`;
 }
 
 export function concatCourtTypes(court) {
