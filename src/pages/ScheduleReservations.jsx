@@ -11,7 +11,7 @@ import {
 } from "../actions/helpers";
 import { getCourtDetail } from "../actions/common";
 import { isUserCompany } from "../actions/user";
-import { makeReservation } from "../actions/client";
+import { makeReservation, cancelReservation } from "../actions/client";
 import IconButton from "../components/IconButton";
 import { MdOutlineSkipPrevious, MdOutlineSkipNext } from "react-icons/md";
 import {
@@ -33,6 +33,7 @@ export default function () {
   const timeline = useSelector((state) => state.management.timeline);
   const court = useSelector((state) => state?.common?.courtDetail ?? {});
   const isCompany = useSelector(isUserCompany);
+  const idUser = useSelector((state) => state.user?.profile?.id ?? -1);
   const [scheduleDate, setScheduleDate] = useState(new Date());
 
   function fetchScheduleData(filters) {
@@ -50,21 +51,36 @@ export default function () {
     dispatch(getCourtDetail(courtId));
   }, []);
 
-  function hanldeMakeReservation(e, picked) {
+  function handleCardClickEvent(e, picked) {
     e.stopPropagation();
-    if (isCompany && picked?.reservation_taken === null) {
+    const isReserved = picked?.reservation_taken !== null;
+    if (isCompany && !isReserved) {
       return;
     }
 
     const isOld = cmpDates(new Date(), new Date(picked.start_datetime));
-    if (isOld && picked?.reservation_taken === null) {
+    if (isOld && !isReserved) {
       toast.warning("This event is already finished!");
       return;
     }
 
-    if (picked?.reservation_taken !== null) {
-      // show reservation modal
-      toast.warning("This event is already reserved!");
+    if (isReserved && picked?.reservation_taken?.user?.id === idUser) {
+      const msg = "This is your event. Do you want to cancel your reservation?";
+      if (confirm(msg)) {
+        dispatch(cancelReservation(picked?.reservation_taken?.id, () => {
+          const dateFilter = dateStr(scheduleDate);
+          fetchScheduleData({
+            date: dateFilter,
+          });
+        }));
+      }
+      return;
+    }
+
+    if (isReserved) {
+      toast.warning(
+        `This event is already reserved by ${picked?.reservation_taken?.user?.username}!`
+      );
       return;
     }
 
@@ -81,13 +97,9 @@ export default function () {
           },
           () => {
             const dateFilter = dateStr(scheduleDate);
-            dispatch(
-              getManagementSchedule({
-                court: courtId,
-                location: locationId,
-                date: dateFilter,
-              })
-            );
+            fetchScheduleData({
+              date: dateFilter,
+            });
           }
         )
       );
@@ -165,7 +177,7 @@ export default function () {
               <div
                 style={styleObject}
                 className="rezervd-event"
-                onClick={(e) => hanldeMakeReservation(e, event)}
+                onClick={(e) => handleCardClickEvent(e, event)}
               >
                 <h6>{event.title}</h6>
                 <div>{formatFromTo(event.start, event.end)}</div>
