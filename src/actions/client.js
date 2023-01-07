@@ -6,13 +6,13 @@ export const getReservations = () => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.CLIENT_GET_RESERVATIONS_START });
         apiRequest({
-            url: '/court-types/', // fake reservations with court types for now TODO: change
+            url: '/reservations/',
             method: 'GET',
             token: accessToken
         }).then((res) => {
             dispatch({
                 type: TYPE.CLIENT_GET_RESERVATIONS_SUCCESS,
-                payload: { reservations: res ?? [] }
+                payload: { reservations: res?.results ?? [] }
             });
         }).catch((_) => {
             dispatch({ type: TYPE.CLIENT_GET_RESERVATIONS_FAIL});

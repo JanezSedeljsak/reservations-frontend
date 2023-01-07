@@ -39,19 +39,21 @@ export default function () {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Location</StyledTableCell>
               <StyledTableCell>Court</StyledTableCell>
               <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Day</StyledTableCell>
+              <StyledTableCell>Start time</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {reservations.map((reservation) => (
               <StyledTableRow key={reservation.id}>
-                <StyledTableCell component="th" scope="court">
-                  Rezervacija
+                <StyledTableCell component="th" scope="court">{reservation.schedule.court}</StyledTableCell>
+                <StyledTableCell>
+                  {reservation.date}
                 </StyledTableCell>
-                <StyledTableCell>Rezervacija</StyledTableCell>
-                <StyledTableCell>Rezervacija</StyledTableCell>
+                <StyledTableCell>{reservation.schedule.day_formatted}</StyledTableCell>
+                <StyledTableCell>{reservation.schedule.start_time}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
