@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import * as TYPE from '../store/types';
 import { getCourtDetail, getLocationDetail } from './common';
-import { asFormData, apiRequest } from './helpers';
+import { asFormData, apiRequest, getSaturdayOfNextWeek } from './helpers';
 
 export const getManagementLocations = filters => {
     return async (dispatch, getState) => {
@@ -158,6 +158,8 @@ export const getLocationCourts = (filters) => {
 export const getManagementSchedule = ({ location, court }) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
+        const saturday = getSaturdayOfNextWeek();
+
         dispatch({ type: TYPE.MANAGEMENT_GET_SCHEDULE_START });
         apiRequest({
             url: `/schedules/?location=${location}&court=${court}`,
@@ -170,6 +172,75 @@ export const getManagementSchedule = ({ location, court }) => {
             });
         }).catch((_) => {
             dispatch({ type: TYPE.MANAGEMENT_GET_SCHEDULE_FAIL });
+        });
+    }
+};
+
+export const createManagementSchedule = ({ locationId, courtId, day, start_time, end_time }) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_CREATE_START });
+        apiRequest({
+            url: `/management/locations/${locationId}/courts/${courtId}/schedules/`,
+            body: asFormData({ day, start_time, end_time, price: 0.00, is_active: true }),
+            method: 'POST',
+            token: accessToken,
+            okStatus: 201
+        }).then((_) => {
+            toast.success('Created new schedule!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_CREATE_SUCCESS });
+            dispatch(getManagementSchedule({
+                location: locationId,
+                court: courtId
+            }));
+        }).catch((_) => {
+            toast.error('Failed to create new schedule!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_CREATE_FAIL });
+        });
+    }
+}
+
+export const updateManagementSchedule = ({ id, locationId, courtId, day, start_time, end_time }) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+        dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_UPDATE_START });
+        apiRequest({
+            url: `/management/locations/${locationId}/courts/${courtId}/schedules/${id}/`,
+            body: asFormData({ day, start_time, end_time, price: 0.00, is_active: true }),
+            method: 'PATCH',
+            token: accessToken
+        }).then((_) => {
+            toast.success('Updated schedule!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_UPDATE_SUCCESS });
+            dispatch(getManagementSchedule({
+                location: locationId,
+                court: courtId
+            }));
+    
+        }).catch((_) => {
+            toast.error('Failed to update schedule!');
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_UPDATE_FAIL });
+        });
+    }
+}
+
+export const getManagementScheduleDetail = ({ locationId, courtId, id }) => {
+    return async (dispatch, getState) => {
+        const { accessToken } = getState().user;
+
+        dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_GET_START });
+        apiRequest({
+            url: `/management/locations/${locationId}/courts/${courtId}/schedules/${id}/`,
+            method: 'GET',
+            token: accessToken
+        }).then((res) => {
+            console.log(res);
+            dispatch({
+                type: TYPE.MANAGEMENT_COURTS_SCHEDULE_GET_SUCCESS,
+                payload: { scheduleDetail: res ?? [] }
+            });
+        }).catch((_) => {
+            dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_GET_FAIL });
         });
     }
 };

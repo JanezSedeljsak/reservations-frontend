@@ -63,6 +63,24 @@ label {
   margin-bottom: 10px;
 }
 
+div[data-testid="date-navigator"],
+div[data-testid="view-navigator"] {
+  display: none !important;
+}
+
+.rezervd-event {
+  padding: 5px;
+  height: 100%;
+}
+
+.calendar-wrapper .rs__hover__op {
+  display: none;
+}
+
+.time-input > * {
+  width: 100%;
+}
+
 @media only screen and (max-width: 600px) {
   .navbar > .container-fluid,
   .main-container {

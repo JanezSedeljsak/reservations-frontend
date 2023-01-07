@@ -54,12 +54,14 @@ export default function ({
     event.preventDefault();
     const data = prepareData();
     dispatch(updateManagementCourt({ ...data, id: courtId }, { search }));
+    setVisible(false);
   }
 
   function handleLocationCreate(event) {
     event.preventDefault();
     const data = prepareData();
     dispatch(createManagementCourt(data, { search }));
+    setVisible(false);
   }
 
   if (!isVisible) {

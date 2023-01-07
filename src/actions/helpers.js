@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 
 export const API = "https://lp0667.pythonanywhere.com/api";
 
@@ -25,14 +26,45 @@ export function handleCourtLocation(court) {
     return str;
 }
 
+export function getSaturdayOfNextWeek() {
+    const today = new Date();
+    const first = today.getDate() - today.getDay() + 1;
+    const sixth = first + 5;
+    const nextSaturday = sixth + 7;
+
+    const saturday = new Date(today.setDate(nextSaturday));
+
+    return saturday.toISOString().split('T')[0];
+}
+
+export function formatFromTo(start, end) {
+    const startHours = start.getHours();
+    let startMinutes = start.getMinutes();
+    const endHours = end.getHours();
+    let endMinutes = end.getMinutes();
+
+    startMinutes = startMinutes.toString().padStart(2, '0');
+    endMinutes = endMinutes.toString().padStart(2, '0');
+
+    const startString = `${startHours}:${startMinutes}`;
+    const endString = `${endHours}:${endMinutes}`;
+
+    return `${startString} - ${endString}`;
+}
+
+export const toDayjs = (timeString) => {
+    const [hours, minutes, seconds] = timeString.split(':')
+    return dayjs().hour(hours).minute(minutes).second(seconds)
+}
+
 export function concatCourtTypes(court) {
-    if (!court?.court_types) { 
-      return '/';
+    if (!court?.court_types) {
+        return '/';
     }
 
     const arr = court.court_types.map(x => x.name);
     return arr.join(", ");
-  }
+}
 
 export function useDebounce(value, delay) {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -77,3 +109,13 @@ export function apiRequest({ url, method, body, okStatus, token }) {
         }
     });
 }
+
+export const DAY_OF_WEEK_OPTIONS = [
+    { id: '1', name: 'Monday' },
+    { id: '2', name: 'Tuesday' },
+    { id: '3', name: 'Wednesday' },
+    { id: '4', name: 'Thursday' },
+    { id: '5', name: 'Friday' },
+    { id: '6', name: 'Saturday' },
+    { id: '7', name: 'Sunday' },
+];

@@ -70,12 +70,14 @@ export default function ({ isVisible, setVisible, locationId, search }) {
     event.preventDefault();
     const data = prepareData();
     dispatch(updateManagementLocation({ ...data, id: locationId }, { search }));
+    setVisible(false);
   }
 
   function handleLocationCreate(event) {
     event.preventDefault();
     const data = prepareData();
     dispatch(createManagementLocation(data, { search }));
+    setVisible(false);
   }
 
   if (!isVisible) {
