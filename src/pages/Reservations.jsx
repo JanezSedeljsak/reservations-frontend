@@ -27,6 +27,7 @@ export default function () {
   }, []);
 
   function handleReservationDate(reservationDate) {
+    if (!reservationDate) return "";
     const current = new Date();
     const rDate = new Date(reservationDate);
 
@@ -62,22 +63,23 @@ export default function () {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reservations.map((reservation) => (
-              <StyledTableRow key={reservation.id}>
-                <StyledTableCell component="th" scope="court">
-                  <h6>{reservation.court.name}</h6>
-                </StyledTableCell>
-                <StyledTableCell>
-                  {handleReservationDate(reservation.date)}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {reservation.schedule.day_formatted}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {reservation.schedule.start_time.substr(0, 5)}
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {Array.isArray(reservations) &&
+              reservations.map((reservation) => (
+                <StyledTableRow key={reservation.id}>
+                  <StyledTableCell component="th" scope="court">
+                    <h6>{reservation?.court?.name}</h6>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {handleReservationDate(reservation?.date)}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {reservation.schedule?.day_formatted}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {reservation.schedule?.start_time.substr(0, 5)}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

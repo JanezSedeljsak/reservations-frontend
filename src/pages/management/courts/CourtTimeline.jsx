@@ -5,7 +5,7 @@ import { Scheduler } from "@aldabil/react-scheduler";
 import IconButton from "../../../components/IconButton";
 import { IoReturnUpBack } from "react-icons/io5";
 import { FaPlusCircle, FaBookOpen } from "react-icons/fa";
-import { Card } from "@mui/material";
+import { Card, Box, CircularProgress } from "@mui/material";
 import { getManagementSchedule } from "../../../actions/management";
 import {
   formatFromTo,
@@ -86,51 +86,57 @@ export default function ({ isMyTimeline, companyId }) {
                 />
               )}
               <IconButton
-                  color="warning"
-                  tooltip={"Show reservations"}
-                  icon={<FaBookOpen />}
-                  onClick={openTimelineReservations}
-                />
+                color="warning"
+                tooltip={"Show reservations"}
+                icon={<FaBookOpen />}
+                onClick={openTimelineReservations}
+              />
             </div>
           </div>
           <div className="calendar-wrapper">
-            <Card>
-              <Scheduler
-                view="week"
-                navigation={false}
-                disableGoToDay={false}
-                editable={false}
-                deletable={false}
-                week={{
-                  weekDays: [0, 1, 2, 3, 4, 5, 6],
-                  weekStartOn: 1,
-                  startHour: 6,
-                  endHour: 23,
-                  step: 120,
-                  navigation: true,
-                  disableGoToDay: false,
-                }}
-                events={
-                  (timeline?.length ?? 0) > 0
-                    ? timeline?.map((event) => ({
-                        title: event.title,
-                        event_id: event?.id,
-                        start: new Date(event.start_datetime),
-                        end: new Date(event.end_datetime),
-                      }))
-                    : []
-                }
-                eventRenderer={(event) => (
-                  <div
-                    className="rezervd-event"
-                    onClick={(e) => openScheduleEditModal(e, event.event_id)}
-                  >
-                    <h6>{event.title}</h6>
-                    <div>{formatFromTo(event.start, event.end)}</div>
-                  </div>
-                )}
-              />
-            </Card>
+            {loading ? (
+              <Box sx={{ display: "flex" }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Card>
+                <Scheduler
+                  view="week"
+                  navigation={false}
+                  disableGoToDay={false}
+                  editable={false}
+                  deletable={false}
+                  week={{
+                    weekDays: [0, 1, 2, 3, 4, 5, 6],
+                    weekStartOn: 1,
+                    startHour: 6,
+                    endHour: 23,
+                    step: 120,
+                    navigation: true,
+                    disableGoToDay: false,
+                  }}
+                  events={
+                    (timeline?.length ?? 0) > 0
+                      ? timeline?.map((event) => ({
+                          title: event.title,
+                          event_id: event?.id,
+                          start: new Date(event.start_datetime),
+                          end: new Date(event.end_datetime),
+                        }))
+                      : []
+                  }
+                  eventRenderer={(event) => (
+                    <div
+                      className="rezervd-event"
+                      onClick={(e) => openScheduleEditModal(e, event.event_id)}
+                    >
+                      <h6>{event.title}</h6>
+                      <div>{formatFromTo(event.start, event.end)}</div>
+                    </div>
+                  )}
+                />
+              </Card>
+            )}
           </div>
         </div>
       </div>
