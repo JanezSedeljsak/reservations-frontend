@@ -21,7 +21,7 @@ export const getReservations = () => {
     };
 }
 
-export const makeReservation = ({ schedule, date }) => {
+export const makeReservation = ({ schedule, date }, callback) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
         dispatch({ type: TYPE.CLIENT_CREATE_RESERVATION_START });
@@ -29,12 +29,11 @@ export const makeReservation = ({ schedule, date }) => {
             url: '/reservations/',
             body: asFormData({ schedule, date }),
             method: 'POST',
-            token: accessToken,
-            okStatus: 201
+            token: accessToken
         }).then((_) => {
             toast.success('Reservation was made!');
             dispatch({ type: TYPE.CLIENT_CREATE_RESERVATION_SUCCESS });
-            dispatch(getManagementLocations(filters));
+            callback();
         }).catch((_) => {
             toast.error('Failed to make the reservation!');
             dispatch({ type: TYPE.CLIENT_CREATE_RESERVATION_FAIL });

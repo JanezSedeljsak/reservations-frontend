@@ -82,7 +82,7 @@ export const createManagementCourt = ({ name, court_types, is_outside, locationI
         }).then((_) => {
             toast.success('Created new location!');
             dispatch({ type: TYPE.MANAGEMENT_COURTS_CREATE_SUCCESS });
-            dispatch(getLocationCourts({...filters, locationId }));
+            dispatch(getLocationCourts({ ...filters, locationId }));
         }).catch((_) => {
             toast.error('Failed to create new location!');
             dispatch({ type: TYPE.MANAGEMENT_COURTS_CREATE_FAIL });
@@ -102,7 +102,7 @@ export const updateManagementCourt = ({ id, name, court_types, is_outside, locat
         }).then((_) => {
             toast.success('Updated location!');
             dispatch({ type: TYPE.MANAGEMENT_COURTS_UPDATE_SUCCESS });
-            dispatch(getLocationCourts({...filters, locationId }));
+            dispatch(getLocationCourts({ ...filters, locationId }));
             dispatch(getCourtDetail(id));
         }).catch((_) => {
             toast.error('Failed to update location!');
@@ -155,13 +155,17 @@ export const getLocationCourts = (filters) => {
     }
 }
 
-export const getManagementSchedule = ({ location, court }) => {
+export const getManagementSchedule = (filters) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
+        let url = `/schedules/?location=${filters.location}&court=${filters.court}`;
+        if (filters?.date) {
+            url += `&date=${filters.date}`;
+        }
 
         dispatch({ type: TYPE.MANAGEMENT_GET_SCHEDULE_START });
         apiRequest({
-            url: `/schedules/?location=${location}&court=${court}`,
+            url,
             method: 'GET',
             token: accessToken
         }).then((res) => {
@@ -215,7 +219,7 @@ export const updateManagementSchedule = ({ id, locationId, courtId, day, start_t
                 location: locationId,
                 court: courtId
             }));
-    
+
         }).catch((_) => {
             toast.error('Failed to update schedule!');
             dispatch({ type: TYPE.MANAGEMENT_COURTS_SCHEDULE_UPDATE_FAIL });
@@ -233,7 +237,6 @@ export const getManagementScheduleDetail = ({ locationId, courtId, id }) => {
             method: 'GET',
             token: accessToken
         }).then((res) => {
-            console.log(res);
             dispatch({
                 type: TYPE.MANAGEMENT_COURTS_SCHEDULE_GET_SUCCESS,
                 payload: { scheduleDetail: res ?? [] }

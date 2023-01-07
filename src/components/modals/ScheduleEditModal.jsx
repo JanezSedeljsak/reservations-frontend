@@ -34,7 +34,6 @@ export default function ({
   );
   const isCreate = scheduleId === null;
   const dispatch = useDispatch();
-  console.log(schedule);
 
   const titleRef = useRef(null);
   const dayRef = useRef(null);

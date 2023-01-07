@@ -13,6 +13,7 @@ import {
   Box,
 } from "@mui/material";
 import { getReservations } from "../actions/client";
+import { cmpDates } from "../actions/helpers";
 
 export default function () {
   const navigate = useNavigate();
@@ -20,11 +21,25 @@ export default function () {
 
   const isLoading = useSelector((state) => state.client.loading);
   const reservations = useSelector((state) => state.client.reservations ?? []);
-  console.log(reservations);
 
   useEffect(() => {
     dispatch(getReservations());
   }, []);
+
+  function handleReservationDate(reservationDate) {
+    const current = new Date();
+    const rDate = new Date(reservationDate);
+
+    if (!cmpDates(current, rDate)) {
+      return reservationDate;
+    }
+
+    return (
+      <span style={{ color: "red", fontWeight: "bold" }}>
+        {reservationDate}
+      </span>
+    );
+  }
 
   const RenderDataTable = () => {
     if (isLoading) {
@@ -49,12 +64,18 @@ export default function () {
           <TableBody>
             {reservations.map((reservation) => (
               <StyledTableRow key={reservation.id}>
-                <StyledTableCell component="th" scope="court">{reservation.court.name}</StyledTableCell>
-                <StyledTableCell>
-                  {reservation.date}
+                <StyledTableCell component="th" scope="court">
+                  <h6>{reservation.court.name}</h6>
                 </StyledTableCell>
-                <StyledTableCell>{reservation.schedule.day_formatted}</StyledTableCell>
-                <StyledTableCell>{reservation.schedule.start_time.substr(0, 5)}</StyledTableCell>
+                <StyledTableCell>
+                  {handleReservationDate(reservation.date)}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {reservation.schedule.day_formatted}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {reservation.schedule.start_time.substr(0, 5)}
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
@@ -69,9 +90,7 @@ export default function () {
         <div className="main-container card-max-height">
           <div className="page-header header-row">
             <div className="page-header">
-              <h4 style={{ marginBottom: 0 }}>
-                My Reservations
-              </h4>
+              <h4 style={{ marginBottom: 0 }}>My Reservations</h4>
             </div>
           </div>
           {RenderDataTable()}

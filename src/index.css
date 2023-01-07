@@ -37,6 +37,10 @@ body,
   margin-bottom: 20px;
 }
 
+.css-xrjn1 {
+  display: none !important;
+}
+
 .card-max-height {
   height: calc(100vh - 120px);
 }

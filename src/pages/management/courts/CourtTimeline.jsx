@@ -22,7 +22,6 @@ export default function ({ isMyTimeline, companyId }) {
   const loading = useSelector((state) => state.management.loading);
   const timeline = useSelector((state) => state.management.timeline);
   const court = useSelector((state) => state?.common?.courtDetail ?? {});
-  console.log(timeline);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scheduleId, setScheduleId] = useState();
