@@ -26,17 +26,6 @@ export function handleCourtLocation(court) {
     return str;
 }
 
-export function getSaturdayOfNextWeek() {
-    const today = new Date();
-    const first = today.getDate() - today.getDay() + 1;
-    const sixth = first + 5;
-    const nextSaturday = sixth + 7;
-
-    const saturday = new Date(today.setDate(nextSaturday));
-
-    return saturday.toISOString().split('T')[0];
-}
-
 export function formatFromTo(start, end) {
     const startHours = start.getHours();
     let startMinutes = start.getMinutes();

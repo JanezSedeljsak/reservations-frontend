@@ -18,7 +18,7 @@ import {
   Box,
 } from "@mui/material";
 import IconButton from "../components/IconButton";
-import CourtDetailModal from '../components/modals/CourtDetailModal';
+import CourtDetailModal from "../components/modals/CourtDetailModal";
 import { handleCourtLocation, concatCourtTypes } from "../actions/helpers";
 
 export default function () {
@@ -46,8 +46,10 @@ export default function () {
     );
   }, [courtTypeRef]);
 
-  function openTimeline(court_id) {
-    alert("open timeline");
+  function openTimeline(court) {
+    navigate(
+      `/company/${court.owner.id}/location/${court.location.id}/court/timeline/${court.id}`
+    );
   }
 
   function handleFilterCourts() {
@@ -90,36 +92,35 @@ export default function () {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(courts) && courts.map((court) => (
-              <StyledTableRow key={court.id}>
-                <StyledTableCell component="th">
-                  {handleCourtLocation(court)}
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="court">
-                  {court?.name}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {concatCourtTypes(court)}
-                </StyledTableCell>
-                <StyledTableCell sx={{ width: 100 }} align="center">
-                  {court?.is_outside ? <FaCheckSquare size={16} /> : null}
-                </StyledTableCell>
-                <StyledTableCell sx={{ width: 250 }} align="right">
-                  <IconButton
-                    color="info"
-                    tooltip={"Court detail"}
-                    icon={<FaExpandArrowsAlt size={20} />}
-                    onClick={() => openCourtDetailModal(court.id)}
-                  />
-                  <IconButton
-                    color="default"
-                    tooltip={"Show court timeline"}
-                    icon={<FaCalendar size={20} />}
-                    onClick={() => openTimeline(court.id)}
-                  />
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {Array.isArray(courts) &&
+              courts.slice(0, 5).map((court) => (
+                <StyledTableRow key={court.id}>
+                  <StyledTableCell component="th">
+                    {handleCourtLocation(court)}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="court">
+                    {court?.name}
+                  </StyledTableCell>
+                  <StyledTableCell>{concatCourtTypes(court)}</StyledTableCell>
+                  <StyledTableCell sx={{ width: 100 }} align="center">
+                    {court?.is_outside ? <FaCheckSquare size={16} /> : null}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ width: 250 }} align="right">
+                    <IconButton
+                      color="info"
+                      tooltip={"Court detail"}
+                      icon={<FaExpandArrowsAlt size={20} />}
+                      onClick={() => openCourtDetailModal(court.id)}
+                    />
+                    <IconButton
+                      color="default"
+                      tooltip={"Show court timeline"}
+                      icon={<FaCalendar size={20} />}
+                      onClick={() => openTimeline(court)}
+                    />
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -142,7 +143,7 @@ export default function () {
                 <Select
                   id={"type"}
                   reference={courtTypeRef}
-                  options={[{ id: '', name: "/" }, ...courtTypes]}
+                  options={[{ id: "", name: "/" }, ...courtTypes]}
                 />
                 <SubmitButton label={"filter"} onPress={handleFilterCourts} />
               </CardContent>

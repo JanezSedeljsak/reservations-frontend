@@ -53,7 +53,7 @@ export default function () {
                   {reservation.date}
                 </StyledTableCell>
                 <StyledTableCell>{reservation.schedule.day_formatted}</StyledTableCell>
-                <StyledTableCell>{reservation.schedule.start_time}</StyledTableCell>
+                <StyledTableCell>{reservation.schedule.start_time.substr(0, 5)}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

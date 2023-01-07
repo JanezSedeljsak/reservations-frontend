@@ -16,7 +16,7 @@ import { FaPhone, FaMailBulk, FaLink } from "react-icons/fa";
 export default ({ isVisible, setVisible, locationId }) => {
   const dispatch = useDispatch();
   const location = useSelector((state) => state.common?.locationDetail ?? {});
-  const loading = useSelector((state) => state.common.loading);
+  const loading = useSelector(state => state.common.detailLoading);
 
   useEffect(() => {
     if (isVisible && locationId) {

@@ -17,7 +17,7 @@ import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 export default ({ isVisible, setVisible, courtId }) => {
   const dispatch = useDispatch();
   const court = useSelector((state) => state?.common?.courtDetail ?? {});
-  const loading = useSelector((state) => state.common.loading);
+  const loading = useSelector(state => state.common.detailLoading);
 
   useEffect(() => {
     if (isVisible && courtId) {

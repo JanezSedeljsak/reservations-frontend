@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import * as TYPE from '../store/types';
 import { getCourtDetail, getLocationDetail } from './common';
-import { asFormData, apiRequest, getSaturdayOfNextWeek } from './helpers';
+import { asFormData, apiRequest } from './helpers';
 
 export const getManagementLocations = filters => {
     return async (dispatch, getState) => {
@@ -158,7 +158,6 @@ export const getLocationCourts = (filters) => {
 export const getManagementSchedule = ({ location, court }) => {
     return async (dispatch, getState) => {
         const { accessToken } = getState().user;
-        const saturday = getSaturdayOfNextWeek();
 
         dispatch({ type: TYPE.MANAGEMENT_GET_SCHEDULE_START });
         apiRequest({

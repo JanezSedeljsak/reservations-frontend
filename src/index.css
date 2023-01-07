@@ -21,6 +21,7 @@ body,
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-x: hidden;
 }
 
 .nav-link:hover {
@@ -30,6 +31,10 @@ body,
 .navbar > .container-fluid,
 .main-container {
   width: min(90%, 1600px) !important;
+}
+
+.main-container {
+  margin-bottom: 20px;
 }
 
 .card-max-height {

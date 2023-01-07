@@ -19,7 +19,7 @@ export default function ({
 }) {
   const dispatch = useDispatch();
   const loading = useSelector(
-    (state) => state.management.loading || state.common.loading
+    (state) => state.management.loading || state.common.loading || state.common.detailLoading
   );
 
   const inProgress = useSelector(

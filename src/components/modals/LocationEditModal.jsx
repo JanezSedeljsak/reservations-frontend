@@ -19,7 +19,7 @@ import { getLocationDetail } from "../../actions/common";
 
 export default function ({ isVisible, setVisible, locationId, search }) {
   const loading = useSelector(
-    (state) => state.management.loading || state.common.loading
+    (state) => state.management.loading || state.common.loading || state.common.detailLoading
   );
   const inProgress = useSelector(
     (state) => state?.management?.actionInProgress ?? false
