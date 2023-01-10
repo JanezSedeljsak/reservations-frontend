@@ -10,8 +10,7 @@ export default function ({ children }) {
         <figure className="text-center" style={{ width: "66%" }}>
           <blockquote className="blockquote">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              posuere erat a ante.
+              Leave the planning to us, just play!
             </p>
           </blockquote>
           <figcaption className="blockquote-footer">

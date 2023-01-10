@@ -44,7 +44,7 @@ function App() {
           path={`/home`}
           element={
             <PrivateRoute isAllowed={isAuth}>
-              {isCompany ? <Locations isMyLocations={true} /> : <Profile />}
+              {isCompany ? <Locations isMyLocations={true} /> : <Reservations />}
             </PrivateRoute>
           }
         />

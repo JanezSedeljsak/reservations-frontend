@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserIcon from "../assets/usericon.png";
 import { getCompanies } from "../actions/common";
-import { useDebounce } from "../actions/helpers";
+import { useDebounce } from "../util/helpers";
 import { Box, CircularProgress } from "@mui/material";
 
 export default function () {
@@ -28,7 +28,7 @@ export default function () {
     navigate(`/company/${companyId}/locations`);
   }
 
-  const renderCompany = (company) => (
+  const RenderCompany = (company) => (
     <div className="card" key={company.id}>
       <div className="card-header" style={{ alignItems: "center" }}>
         <img src={getAvatar(company)} width={30} height={30} />
@@ -81,7 +81,7 @@ export default function () {
               <CircularProgress />
             </Box>
           ) : (
-            companies.map(renderCompany)
+            companies.map(RenderCompany)
           )}
         </div>
       </div>

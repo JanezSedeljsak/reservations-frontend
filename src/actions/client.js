@@ -1,6 +1,6 @@
 import * as TYPE from '../store/types';
-import { apiRequest, asFormData } from './helpers';
-import * as toast from './toast';
+import { apiRequest, asFormData } from '../util/helpers';
+import * as toast from '../util/toast';
 
 export const getReservations = () => {
     return async (dispatch, getState) => {

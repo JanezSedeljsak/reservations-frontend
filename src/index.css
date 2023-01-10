@@ -15,6 +15,7 @@ body,
   width: 100vw;
   height: 100vh;
   background-color: var(--ligh-background);
+  overflow-x: hidden;
 }
 
 .center {
@@ -78,6 +79,7 @@ div[data-testid="view-navigator"] {
 }
 
 .rezervd-event {
+  background-image: linear-gradient(to bottom, #4b79a1, #283e51);
   padding: 5px;
   height: 100%;
 }
@@ -88,6 +90,15 @@ div[data-testid="view-navigator"] {
 
 .time-input > * {
   width: 100%;
+}
+
+.legend-item > div {
+  display: flex;
+  align-items: center;
+}
+
+.courts-container .css-46bh2p-MuiCardContent-root:last-child {
+  padding: 16px !important;
 }
 
 @media only screen and (max-width: 600px) {

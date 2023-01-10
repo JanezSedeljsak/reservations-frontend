@@ -68,7 +68,7 @@ export default function ({
     return null;
   }
 
-  function renderForm() {
+  function RenderForm() {
     if (loading) {
       return <CircularProgress />;
     }
@@ -112,7 +112,7 @@ export default function ({
     >
       <Box sx={{ width: 700, m: 2 }} role="presentation">
         <h5>Court form</h5>
-        {renderForm()}
+        {RenderForm()}
       </Box>
     </SwipeableDrawer>
   );

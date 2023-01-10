@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { userLogout, userRegister } from "../actions/user";
 import { Input, SubmitButton } from "../components/form";
 import { isProfileLoaded } from "../actions/user";
+import { useEffectOnce } from '../util/helpers';
 
 export default function () {
   const isAuth = useSelector((state) => !!state.user.accessToken);
@@ -21,9 +22,9 @@ export default function () {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     dispatch(userLogout());
-  }, []);
+  });
 
   useEffect(() => {
     if (isAuth && isProfile) {

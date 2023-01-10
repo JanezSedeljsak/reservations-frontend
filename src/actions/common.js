@@ -1,5 +1,5 @@
 import * as TYPE from '../store/types';
-import { apiRequest } from './helpers';
+import { apiRequest } from '../util/helpers';
 
 export const getCompanies = (filters) => {
     return async (dispatch, getState) => {

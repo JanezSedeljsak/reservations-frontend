@@ -24,7 +24,7 @@ export default ({ isVisible, setVisible, locationId }) => {
     }
   }, [locationId, isVisible]);
 
-  function renderContent() {
+  function RenderContent() {
     if (loading) {
       return (
         <Box sx={{ display: "flex", margin: 3 }}>
@@ -62,7 +62,7 @@ export default ({ isVisible, setVisible, locationId }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <div className="detail-modal">{renderContent()}</div>
+      <div className="detail-modal">{RenderContent()}</div>
     </Modal>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Scheduler } from "@aldabil/react-scheduler";
 import { Card, Box, CircularProgress } from "@mui/material";
@@ -8,20 +8,28 @@ import {
   cmpDates,
   formatFromTo,
   handleCourtTimelineTitle,
-} from "../actions/helpers";
+  handleWeekDay,
+} from "../util/helpers";
 import { getCourtDetail } from "../actions/common";
 import { isUserCompany } from "../actions/user";
 import { makeReservation, cancelReservation } from "../actions/client";
 import IconButton from "../components/IconButton";
-import { MdOutlineSkipPrevious, MdOutlineSkipNext } from "react-icons/md";
+import {
+  MdOutlineSkipPrevious,
+  MdOutlineSkipNext,
+  MdInfo,
+} from "react-icons/md";
 import {
   getWeekString,
   getDateWithOffset,
   getNearestPastMonday,
   dateStr,
   addTimeToDate,
-} from "../actions/helpers";
-import * as toast from "../actions/toast";
+  useEffectOnce,
+} from "../util/helpers";
+import * as toast from "../util/toast";
+import getGradient from "../util/gradients";
+import ScheduleColorModal from "../components/modals/ScheduleColorModal";
 
 export default function () {
   const { courtId, locationId } = useParams();
@@ -34,7 +42,9 @@ export default function () {
   const court = useSelector((state) => state?.common?.courtDetail ?? {});
   const isCompany = useSelector(isUserCompany);
   const idUser = useSelector((state) => state.user?.profile?.id ?? -1);
-  const [scheduleDate, setScheduleDate] = useState(new Date());
+
+  const [scheduleDate, setScheduleDate] = useState(handleWeekDay());
+  const [legendVisible, setLegendVisible] = useState(false);
 
   function fetchScheduleData(filters) {
     dispatch(
@@ -46,10 +56,11 @@ export default function () {
     );
   }
 
-  useEffect(() => {
-    fetchScheduleData({});
+  useEffectOnce(() => {
+    const dateFilter = dateStr(scheduleDate);
+    fetchScheduleData({ date: dateFilter });
     dispatch(getCourtDetail(courtId));
-  }, []);
+  });
 
   function handleCardClickEvent(e, picked) {
     e.stopPropagation();
@@ -61,6 +72,10 @@ export default function () {
     const isOld = cmpDates(new Date(), new Date(picked.start_datetime));
     if (isOld && !isReserved) {
       toast.warning("This event is already finished!");
+      return;
+    }
+
+    if (isOld) {
       return;
     }
 
@@ -121,13 +136,17 @@ export default function () {
   }
 
   function handleDateOffset(dayOffset, time) {
-    const thisMonday = getNearestPastMonday(new Date());
-    const eventDate = getDateWithOffset(thisMonday, parseInt(dayOffset) - 1);
+    const today = new Date();
+    const thisMonday = getNearestPastMonday(today);
+    let eventDate = getDateWithOffset(thisMonday, parseInt(dayOffset) - 1);
+    if (today.getDay() === 0) {
+      eventDate = getDateWithOffset(eventDate, -7);
+    }
     const dateWithTime = addTimeToDate(eventDate, time);
     return dateWithTime;
   }
 
-  function renderSchedule() {
+  function RenderSchedule() {
     if (loading) {
       return (
         <Box sx={{ display: "flex" }}>
@@ -165,19 +184,19 @@ export default function () {
               : []
           }
           eventRenderer={(event) => {
-            const styleObject = {};
+            let gradientName = "open";
             if (event?.reservation_taken !== null) {
-              styleObject["backgroundColor"] = "#ff5f1f";
+              gradientName = "reserved";
             }
 
             const isOld = cmpDates(new Date(), new Date(event.start_datetime));
             if (isOld && event?.reservation_taken === null) {
-              styleObject["backgroundColor"] = "#556";
+              gradientName = "old";
             }
 
             return (
               <div
-                style={styleObject}
+                style={{ backgroundImage: getGradient(gradientName) }}
                 className="rezervd-event"
                 onClick={(e) => handleCardClickEvent(e, event)}
               >
@@ -200,6 +219,12 @@ export default function () {
               <h4 style={{ marginBottom: 0 }}>
                 {handleCourtTimelineTitle(court)}
               </h4>
+              <IconButton
+                color="info"
+                tooltip="Show color legend"
+                icon={<MdInfo size={25} />}
+                onClick={() => setLegendVisible(true)}
+              />
             </div>
             <div>
               <IconButton
@@ -224,9 +249,13 @@ export default function () {
               />
             </div>
           </div>
-          <div className="calendar-wrapper">{renderSchedule()}</div>
+          <div className="calendar-wrapper">{RenderSchedule()}</div>
         </div>
       </div>
+      <ScheduleColorModal
+        isVisible={legendVisible}
+        setVisible={setLegendVisible}
+      />
     </>
   );
 }

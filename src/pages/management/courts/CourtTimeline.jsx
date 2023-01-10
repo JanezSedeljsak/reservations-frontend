@@ -7,12 +7,10 @@ import { IoReturnUpBack } from "react-icons/io5";
 import { FaPlusCircle, FaBookOpen } from "react-icons/fa";
 import { Card, Box, CircularProgress } from "@mui/material";
 import { getManagementSchedule } from "../../../actions/management";
-import {
-  formatFromTo,
-  handleCourtTimelineTitle,
-} from "../../../actions/helpers";
+import { formatFromTo, handleCourtTimelineTitle } from "../../../util/helpers";
 import ScheduleEditModal from "../../../components/modals/ScheduleEditModal";
 import { getCourtDetail } from "../../../actions/common";
+import { useEffectOnce } from "../../../util/helpers";
 
 export default function ({ isMyTimeline, companyId }) {
   const { id: courtId, locationId } = useParams();
@@ -57,10 +55,10 @@ export default function ({ isMyTimeline, companyId }) {
     dispatch(getManagementSchedule({ court: courtId, location: locationId }));
   }
 
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchScheduleData();
     dispatch(getCourtDetail(courtId));
-  }, []);
+  });
 
   return (
     <>

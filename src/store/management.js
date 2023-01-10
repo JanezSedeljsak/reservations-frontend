@@ -8,6 +8,7 @@ const initialState = {
     scheduleDetail: {},
     loading: false,
     actionInProgress: false,
+    detailLoading: false
 };
 
 export default function (state = initialState, action) {
@@ -41,11 +42,11 @@ export default function (state = initialState, action) {
             return { ...state, loading: false, analytics: [] };
 
         case TYPE.MANAGEMENT_COURTS_SCHEDULE_GET_START:
-            return { ...state, loading: true, analytics: [] };
+            return { ...state, detailLoading: true, analytics: [] };
         case TYPE.MANAGEMENT_COURTS_SCHEDULE_GET_SUCCESS:
-            return { ...state, loading: false, scheduleDetail: action.payload.scheduleDetail };
+            return { ...state, detailLoading: false, scheduleDetail: action.payload.scheduleDetail };
         case TYPE.MANAGEMENT_COURTS_SCHEDULE_GET_FAIL:
-            return { ...state, loading: false, analytics: [] };
+            return { ...state, detailLoading: false, analytics: [] };
 
         case TYPE.MANAGEMENT_COURTS_CREATE_START:
         case TYPE.MANAGEMENT_COURTS_UPDATE_START:

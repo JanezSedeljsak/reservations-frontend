@@ -84,7 +84,7 @@ export default function ({ isVisible, setVisible, locationId, search }) {
     return null;
   }
 
-  function renderForm() {
+  function RenderForm() {
     if (loading) {
       return <CircularProgress />;
     }
@@ -148,7 +148,7 @@ export default function ({ isVisible, setVisible, locationId, search }) {
     >
       <Box sx={{ width: 700, m: 2 }} role="presentation">
         <h5>Location form</h5>
-        {renderForm()}
+        {RenderForm()}
       </Box>
     </SwipeableDrawer>
   );

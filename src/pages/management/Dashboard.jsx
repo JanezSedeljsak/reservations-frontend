@@ -13,6 +13,7 @@ import { getManagementAnalytics } from "../../actions/management";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { CircularProgress, Box } from "@mui/material";
+import { useEffectOnce } from "../../util/helpers";
 
 ChartJS.register(
   CategoryScale,
@@ -93,9 +94,9 @@ export default () => {
   const [locations, setLocations] = useState([]);
   const [courts, setCourts] = useState([]);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     dispatch(getManagementAnalytics());
-  }, []);
+  });
 
   useEffect(() => {
     const locationCounter = {};

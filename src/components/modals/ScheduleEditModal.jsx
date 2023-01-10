@@ -7,7 +7,7 @@ import {
   updateManagementSchedule,
   getManagementScheduleDetail,
 } from "../../actions/management";
-import { DAY_OF_WEEK_OPTIONS, toDayjs } from "../../actions/helpers";
+import { DAY_OF_WEEK_OPTIONS, toDayjs } from "../../util/helpers";
 import dayjs from "dayjs";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,7 @@ export default function ({
   courtId,
   scheduleId,
 }) {
-  const loading = useSelector((state) => state.management.loading);
+  const loading = useSelector((state) => state.management.detailLoading);
   const inProgress = useSelector(
     (state) => state?.management?.actionInProgress ?? false
   );
@@ -89,7 +89,7 @@ export default function ({
     return null;
   }
 
-  function renderForm() {
+  function RenderForm() {
     if (loading) {
       return <CircularProgress />;
     }
@@ -145,7 +145,7 @@ export default function ({
     >
       <Box sx={{ width: 700, m: 2 }} role="presentation">
         <h5>Schedule form</h5>
-        {renderForm()}
+        {RenderForm()}
       </Box>
     </SwipeableDrawer>
   );

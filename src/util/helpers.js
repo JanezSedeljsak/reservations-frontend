@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import dayjs from 'dayjs';
 
 export const API = "https://lp0667.pythonanywhere.com/api";
@@ -162,3 +162,44 @@ export function addTimeToDate(date, time) {
     newDate.setSeconds(seconds);
     return newDate;
 }
+
+export function handleWeekDay(date) {
+    // get previous week if sunday
+    date = date ?? new Date();
+    if (date.getDay() === 0) {
+        return getDateWithOffset(date, -1);
+    }
+
+    return date;
+}
+
+export const useEffectOnce = (effect) => {
+
+    const destroyFunc = useRef();
+    const effectCalled = useRef(false);
+    const renderAfterCalled = useRef(false);
+    const [val, setVal] = useState(0);
+
+    if (effectCalled.current) {
+        renderAfterCalled.current = true;
+    }
+
+    useEffect(() => {
+
+        // only execute the effect first time around
+        if (!effectCalled.current) {
+            destroyFunc.current = effect();
+            effectCalled.current = true;
+        }
+
+        // this forces one render after the effect is run
+        setVal(val => val + 1);
+
+        return () => {
+            // if the comp didn't render since the useEffect was called,
+            // we know it's the dummy React cycle
+            if (!renderAfterCalled.current) { return; }
+            if (destroyFunc.current) { destroyFunc.current(); }
+        };
+    }, []);
+};

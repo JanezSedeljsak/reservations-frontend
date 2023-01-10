@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { FaCalendar, FaCheckSquare, FaExpandArrowsAlt } from "react-icons/fa";
+import {
+  FaCalendar,
+  FaCheckSquare,
+  FaAngleDoubleDown,
+  FaAngleDoubleUp,
+  FaExpandArrowsAlt,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { getCourts, getCourtTypes } from "../actions/common";
+import { getCourts } from "../actions/common";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledTableCell, StyledTableRow } from "../components/StyledTable";
 import { Select, Input, SubmitButton } from "../components/form";
@@ -19,7 +25,7 @@ import {
 } from "@mui/material";
 import IconButton from "../components/IconButton";
 import CourtDetailModal from "../components/modals/CourtDetailModal";
-import { handleCourtLocation, concatCourtTypes } from "../actions/helpers";
+import { handleCourtLocation, concatCourtTypes } from "../util/helpers";
 
 export default function () {
   const navigate = useNavigate();
@@ -31,13 +37,13 @@ export default function () {
 
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [courtId, setCourtId] = useState(null);
+  const [showFilters, setShowFilters] = useState(true);
 
   const courtTypeRef = useRef(null);
   const searchRef = useRef(null);
 
   // on screen load -> get court types
   useEffect(() => {
-    dispatch(getCourtTypes());
     dispatch(
       getCourts({
         search: searchRef?.current?.value,
@@ -50,6 +56,10 @@ export default function () {
     navigate(
       `/company/${court.owner.id}/location/${court.location.id}/court/timeline/${court.id}/reservations`
     );
+  }
+
+  function toggleFilters() {
+    setShowFilters(!showFilters);
   }
 
   function handleFilterCourts() {
@@ -65,6 +75,17 @@ export default function () {
     setCourtId(court_id);
     setDetailModalVisible(true);
   }
+
+  const HandleToogleIcon = () => {
+    return (
+      <IconButton
+        color="default"
+        tooltip={"Toggle show filters"}
+        icon={!showFilters ? <FaAngleDoubleDown /> : <FaAngleDoubleUp />}
+        onClick={toggleFilters}
+      />
+    );
+  };
 
   const RenderDataTable = () => {
     if (isLoading) {
@@ -130,22 +151,37 @@ export default function () {
   return (
     <>
       <div className="center" style={{ marginTop: 20 }}>
-        <div className="main-container card-max-height">
+        <div className="main-container card-max-height courts-container">
           <div style={{ marginBottom: 10 }}>
             <Card>
               <CardContent>
-                <h4>Courts</h4>
-                <Input
-                  reference={searchRef}
-                  id={"name_city"}
-                  label={"Name or city"}
-                />
-                <Select
-                  id={"type"}
-                  reference={courtTypeRef}
-                  options={[{ id: "", name: "/" }, ...courtTypes]}
-                />
-                <SubmitButton label={"filter"} onPress={handleFilterCourts} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <h4>Courts</h4>
+                  <HandleToogleIcon />
+                </div>
+                {showFilters ? (
+                  <>
+                    <Input
+                      reference={searchRef}
+                      id={"name_city"}
+                      label={"Name or city"}
+                    />
+                    <Select
+                      id={"type"}
+                      reference={courtTypeRef}
+                      options={[{ id: "", name: "/" }, ...courtTypes]}
+                    />
+                    <SubmitButton
+                      label={"filter"}
+                      onPress={handleFilterCourts}
+                    />
+                  </>
+                ) : null}
               </CardContent>
             </Card>
           </div>

@@ -5,7 +5,7 @@ import { GoLocation, GoPencil } from "react-icons/go";
 import { FaPlusCircle, FaExpandArrowsAlt } from "react-icons/fa";
 import { TbSoccerField } from "react-icons/tb";
 import LocationEditModal from "../../components/modals/LocationEditModal";
-import { useDebounce } from "../../actions/helpers";
+import { useDebounce, useEffectOnce } from "../../util/helpers";
 import {
   Paper,
   TableRow,
@@ -47,11 +47,11 @@ export default function ({ isMyLocations, companyId }) {
     setModalVisible(true);
   }
 
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!isMyLocations) {
       dispatch(getLocations({ companyId }));
     }
-  }, []);
+  });
 
   useEffect(() => {
     if (!isMyLocations) {
@@ -126,7 +126,7 @@ export default function ({ isMyLocations, companyId }) {
     );
   };
 
-  function renderModals() {
+  function RenderModals() {
     return (
       <>
         <LocationEditModal
@@ -179,7 +179,7 @@ export default function ({ isMyLocations, companyId }) {
           {RenderDataTable()}
         </div>
       </div>
-      {renderModals()}
+      {RenderModals()}
     </>
   );
 }

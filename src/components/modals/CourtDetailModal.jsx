@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourtDetail } from "../../actions/common";
 import "../../assets/modalstyle.css";
-import { concatCourtTypes, handleCourtLocation } from "../../actions/helpers";
+import { concatCourtTypes, handleCourtLocation } from "../../util/helpers";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
 export default ({ isVisible, setVisible, courtId }) => {
@@ -25,7 +25,7 @@ export default ({ isVisible, setVisible, courtId }) => {
     }
   }, [courtId, isVisible]);
 
-  function renderContent() {
+  function RenderContent() {
     if (loading) {
       return (
         <Box sx={{ display: "flex", margin: 3 }}>
@@ -74,7 +74,7 @@ export default ({ isVisible, setVisible, courtId }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <div className="detail-modal">{renderContent()}</div>
+      <div className="detail-modal">{RenderContent()}</div>
     </Modal>
   );
 };

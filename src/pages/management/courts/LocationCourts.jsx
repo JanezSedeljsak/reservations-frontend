@@ -12,7 +12,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import CourtEditModal from "../../../components/modals/CourtEditModal";
 import {
   getCourts,
-  getCourtTypes,
   getLocationDetail,
 } from "../../../actions/common";
 import {
@@ -35,7 +34,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import IconButton from "../../../components/IconButton";
-import { useDebounce, concatCourtTypes } from "../../../actions/helpers";
+import {
+  useDebounce,
+  concatCourtTypes,
+  useEffectOnce,
+} from "../../../util/helpers";
 import CourtDetailModal from "../../../components/modals/CourtDetailModal";
 
 export default function ({ isMyCourts, companyId }) {
@@ -96,15 +99,14 @@ export default function ({ isMyCourts, companyId }) {
   }
 
   // on screen load -> get court types
-  useEffect(() => {
-    dispatch(getCourtTypes());
+  useEffectOnce(() => {
     dispatch(getLocationDetail(locationId));
     if (isMyCourts) {
       dispatch(getLocationCourts({ locationId }));
     } else {
       dispatch(getCourts({ location: locationId }));
     }
-  }, []);
+  });
 
   function openTimeline(court_id) {
     if (isMyCourts) {

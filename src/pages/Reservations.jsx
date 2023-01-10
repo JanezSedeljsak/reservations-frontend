@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledTableCell, StyledTableRow } from "../components/StyledTable";
 import {
@@ -13,18 +12,16 @@ import {
   Box,
 } from "@mui/material";
 import { getReservations } from "../actions/client";
-import { cmpDates } from "../actions/helpers";
+import { cmpDates, useEffectOnce } from "../util/helpers";
 
 export default function () {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const isLoading = useSelector((state) => state.client.loading);
   const reservations = useSelector((state) => state.client.reservations ?? []);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     dispatch(getReservations());
-  }, []);
+  });
 
   function handleReservationDate(reservationDate) {
     if (!reservationDate) return "";
