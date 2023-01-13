@@ -16,6 +16,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
+import * as toast from '../../util/toast';
 
 export default function ({
   isVisible,
@@ -60,6 +61,11 @@ export default function ({
   }, [scheduleId, isVisible]);
 
   function prepareData() {
+    if (start.$d > end.$d) {
+      toast.error("Start time must be smaller than end time!");
+      return;
+    }
+
     return {
       locationId,
       courtId,
@@ -74,6 +80,7 @@ export default function ({
   function handleScheduleUpdate(event) {
     event.preventDefault();
     const data = prepareData();
+    if (!data) return; 
     setVisible(false);
     dispatch(updateManagementSchedule(data));
   }
@@ -81,6 +88,7 @@ export default function ({
   function handleScheduleCreate(event) {
     event.preventDefault();
     const data = prepareData();
+    if (!data) return;
     setVisible(false);
     dispatch(createManagementSchedule(data));
   }
