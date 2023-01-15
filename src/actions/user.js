@@ -90,6 +90,7 @@ export const getCurrentUser = () => {
 export const userLogout = () => {
     return (dispatch) => {
         dispatch({ type: TYPE.USER_LOGOUT });
+        dispatch({ type: TYPE.RESET_STATE });
     }
 }
 

@@ -63,6 +63,9 @@ export default function (state = initialState, action) {
         case TYPE.COMMON_GET_CITIES_FAIL:
             return { ...state, loading: false, cities: {} };
 
+        case TYPE.RESET_STATE:
+            return { ...initialState };
+
         default:
             return state;
     }

@@ -43,6 +43,7 @@ export default function (state = initialState, action) {
         case TYPE.USER_LOGIN_FAIL:
         case TYPE.USER_GET_FAIL:
         case TYPE.USER_LOGOUT:
+        case TYPE.RESET_STATE:
             return { ...initialState };
         default:
             return state;

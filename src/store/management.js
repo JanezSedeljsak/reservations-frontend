@@ -76,6 +76,9 @@ export default function (state = initialState, action) {
         case TYPE.MANAGEMENT_COURTS_DELETE_SUCCESS:
         case TYPE.MANAGEMENT_COURTS_DELETE_FAIL:
             return { ...state, loading: false };
+        
+        case TYPE.RESET_STATE:
+            return { ...initialState };
 
         default:
             return state;

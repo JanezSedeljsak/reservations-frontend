@@ -26,6 +26,9 @@ export default function (state = initialState, action) {
         case TYPE.CLIENT_DELETE_RESERVATION_FAIL:
             return { ...state, loading: false, reservations: [] };
 
+        case TYPE.RESET_STATE:
+            return { ...initialState };
+
         default:
             return state;
     }
